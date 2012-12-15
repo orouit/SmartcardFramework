@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ApduList>
+	<Apdu Name="Verify CHV" Class="A0" Ins="20" P1="0" P2="1" P3="8" Data="31323334FFFFFFFF" />
+	<Apdu Name="Select MF" Class="A0" Ins="A4" P1="0" P2="0" P3="2" Data="3F00" />
+	<Apdu Name="Select File" Class="A0" Ins="A4" P1="0" P2="0" P3="2" Data="0000" />
+	<Apdu Name="Read Binary" Class="A0" Ins="B0" P1="0" P2="0" P3="DR15" />
+	<Apdu Name="Update Binary" Class="A0" Ins="D6" P1="0" P2="0" P3="DL" Data="" />
+	<Apdu Name="Read Record" Class="A0" Ins="B2" P1="1" P2="4" P3="DR15" />
+	<Apdu Name="Seek" Class="A0" Ins="A2" P1="0" P2="0" P3="DL" Data="" />
+	<Apdu Name="Get Response" Class="A0" Ins="C0" P1="0" P2="0" P3="SW2" />
+  <Apdu Name="Get Status" Class="A0" Ins="F2" P1="0" P2="0" Lc="0" Le="R,13:DR13" Data="" />
+  <Apdu Name="Select 7F10" Class="A0" Ins="A4" P1="0" P2="0" P3="2" Data="7F10" />
+	<Apdu Name="Select 6F3A" Class="A0" Ins="A4" P1="0" P2="0" P3="2" Data="6F3A" />
+	<Apdu Name="Update Record 3" Class="A0" Ins="DC" P1="3" P2="4" P3="28" Data="4F6C6976696572204D616973FFFF07913344026414F8FFFFFFFFFFFF" />
+	<Apdu Name="Update Record 4" Class="A0" Ins="DC" P1="3" P2="4" P3="DL" Data="4F6C69766965722054726176FFFF07913344325628F2FFFFFFFFFFFF" />
+	<Apdu Name="Update Record 5" Class="A0" Ins="DC" P1="3" P2="4" P3="28"  Data="4F6C6976696572204D6F62FFFFFF07913326500850F0FFFFFFFFFFFF" />
+</ApduList>

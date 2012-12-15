@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SequenceList>
+	<Sequence Name="Verify CHV1" PIN="FFFFFFFFFFFFFFFF">
+		<Command Apdu="Verify CHV" P2="1" Data="PIN"/>
+	</Sequence>
+	<Sequence Name="Read ADN" Record="5">
+		<Command Sequence="Select ADN"/>
+		<Command Apdu="Read Record" P1="Record"/>
+	</Sequence>
+	<Sequence Name="Select ADN">
+		<Command Apdu="Select File" Data="7F10"/>
+		<Command Apdu="Select File" Data="6F3A"/>
+		<Command Apdu="Get Response"/>
+	</Sequence>
+	<Sequence Name="Select Telecom">
+		<Command Apdu="Select File" Data="7F10"/>
+		<Command Apdu="Get Response"/>
+	</Sequence>
+</SequenceList>

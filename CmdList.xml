@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CommandList>
+	<Apdu Name="VerifyCHV" Class="A0" Ins="20" P1="0" P2="1" Lc="8" Le="0" Data="31323334FFFFFFFF" />
+	<Apdu Name="Select MF" Class="A0" Ins="A4" P1="0" P2="0" Lc="2" Le="0" Data="3F00" />
+	<Apdu Name="Select File" Class="A0" Ins="A4" P1="0" P2="0" Lc="2" Le="0" Data="0000" />
+	<Apdu Name="Get Response" Class="A0" Ins="C0" P1="0" P2="0" Lc="0" Le="SW2" Data="" />
+	<Apdu Name="Select 7F10" Class="A0" Ins="A4" P1="0" P2="0" Lc="2" Le="0" Data="7F10" />
+	<Apdu Name="Select 6F3A" Class="A0" Ins="A4" P1="0" P2="0" Lc="2" Le="0" Data="6F3A" />
+	<Apdu Name="Read Record" Class="A0" Ins="B2" P1="1" P2="4" Lc="0" Le="DR15" Data="" />
+	<Apdu Name="Update Record 3" Class="A0" Ins="DC" P1="3" P2="4" Lc="28" Le="0" Data="4F6C6976696572204D616973FFFF07913344026414F8FFFFFFFFFFFF" />
+	<Apdu Name="Update Record 4" Class="A0" Ins="DC" P1="3" P2="4" Lc="DL" Le="0" Data="4F6C69766965722054726176FFFF07913344325628F2FFFFFFFFFFFF" />
+	<Apdu Name="Update Record 5" Class="A0" Ins="DC" P1="3" P2="4" Lc="28" Le="0" Data="4F6C6976696572204D6F62FFFFFF07913326500850F0FFFFFFFFFFFF" />
+	<Apdu Name="Select OTP Applet" Class="00" Ins="A4" P1="4" P2="0" Lc="16" Le="0" Data="A0000000185000000000000052414441" />
+	<Apdu Name="Get Next OTP" Class="A0" Ins="1A" P1="80" P2="4" Lc="0" Le="4" Data="" />
+	<Apdu Name="Get Status" Class="A0" Ins="F2" P1="0" P2="0" Lc="0" Le="R,13:DR13" Data="" />
+	<Apdu Name="Get Current OTP" Class="A0" Ins="1A" P1="80" P2="5" Lc="0" Le="4" Data="" />
+	<Apdu Name="Get Raw OTP" Class="A0" Ins="1A" P1="80" P2="0A" Lc="0" Le="20" Data="" />
+	<Apdu Name="Get OTP Counter" Class="A0" Ins="1A" P1="80" P2="3" Lc="0" Le="8" Data="" />
+	<Apdu Name="Get OTP ID" Class="A0" Ins="1A" P1="80" P2="2" Lc="0" Le="R,0:SW1?6C" Data="" />
+	<Sequence Name="Read ADN" Record="5">
+		<Command Sequence="Select ADN"/>
+		<Command Apdu="Read Record" P1="Record"/>
+	</Sequence>
+	<Sequence Name="Select ADN">
+		<Command Apdu="Select File" Data="7F10"/>
+		<Command Apdu="Select File" Data="6F3A"/>
+		<Command Apdu="Get Response"/>
+	</Sequence>
+	<Sequence Name="Select Telecom">
+		<Command Apdu="Select File" Data="7F10"/>
+		<Command Apdu="Get Response"/>
+	</Sequence>
+</CommandList>
