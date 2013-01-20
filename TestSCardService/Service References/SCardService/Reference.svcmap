@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="63776517-295c-4323-b2be-e360d232c8ba" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://localhost:8001/SCardService/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="2fc8e374-677f-43b1-8d8a-81c6c4e177d5" SourceId="1" SourceUrl="net.tcp://localhost:8001/SCardService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="7395ea21-0b0b-461a-9607-a9156c38ae5d" SourceId="1" SourceUrl="net.tcp://localhost:8001/SCardService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="262c2340-6e76-4b0d-923c-f65c902d7f0c" SourceId="1" SourceUrl="net.tcp://localhost:8001/SCardService/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="3c814f76-cd53-4087-ace3-7c7820b2537f" SourceId="1" SourceUrl="net.tcp://localhost:8001/SCardService/mex" />
+    <MetadataFile FileName="GemCard.xsd" MetadataType="Schema" ID="1dd54833-43c9-4bf1-a607-5948981f06de" SourceId="1" SourceUrl="net.tcp://localhost:8001/SCardService/mex" />
+    <MetadataFile FileName="GemCard.Service.xsd" MetadataType="Schema" ID="1f351908-1b68-47cc-b623-50527c86ff36" SourceId="1" SourceUrl="net.tcp://localhost:8001/SCardService/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

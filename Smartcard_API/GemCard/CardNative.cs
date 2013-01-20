@@ -54,7 +54,7 @@ namespace GemCard
 	/// <summary>
 	/// Implementation of ICard using native (P/Invoke) interoperability for PC/SC
 	/// </summary>
-	public class CardNative : CardBase
+	public class CardNative : CardBase, IDisposable
 	{
         private IntPtr m_hContext = IntPtr.Zero;
         private IntPtr m_hCard = IntPtr.Zero;
@@ -625,5 +625,12 @@ namespace GemCard
 
             SCardReleaseContext(hContext);
         }
-	}
+
+        public void Dispose()
+        {
+            Disconnect(DISCONNECT.Unpower);
+
+            ReleaseContext();
+        }
+    }
 }
