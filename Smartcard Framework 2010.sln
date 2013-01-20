@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartcardService", "Smartca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCardServiceHost", "SCardServiceHost\SCardServiceHost.csproj", "{457CCCC6-C911-4623-84AA-5072721853DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSCardService", "TestSCardService\TestSCardService.csproj", "{8E8E2885-A5BD-4FAC-9FE4-D9727D606356}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSCardService", "DemoSCardService\DemoSCardService.csproj", "{8E8E2885-A5BD-4FAC-9FE4-D9727D606356}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

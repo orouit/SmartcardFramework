@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="037c3fd8-bef3-4b3d-800f-1d3ad34939b1" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.pipe://localhost/SCardService/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="1462ee15-8bbd-41a5-9e46-15de987424b9" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a6c22f9a-25aa-4d6c-ba85-9f3fc0e5f901" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="217260bd-9069-463d-84ff-8a3ac061a148" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="d9233aaa-c257-4897-b166-d17aca8f79a1" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
+    <MetadataFile FileName="GemCard.xsd" MetadataType="Schema" ID="d2b1a975-05db-424f-9fb1-1cf0dfbbfe10" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
+    <MetadataFile FileName="GemCard.Service.xsd" MetadataType="Schema" ID="25f7c501-2cba-4ed8-8bfd-a988e08fee1d" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
