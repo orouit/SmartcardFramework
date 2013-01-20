@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TestSCardService
+namespace DemoSCardService
 {
     /// <summary>
     /// Define NET_TCP to connect to the TCP service, otherwise it is using the

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TestSCardService.SCardNPService {
+namespace DemoSCardService.SCardNPService {
     using System.Runtime.Serialization;
     using System;
     
@@ -277,31 +277,31 @@ namespace TestSCardService.SCardNPService {
         string[] ListReaders();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteCard/Connect", ReplyAction="http://tempuri.org/IRemoteCard/ConnectResponse")]
-        void Connect(string Reader, TestSCardService.SCardNPService.SHARE ShareMode, TestSCardService.SCardNPService.PROTOCOL PreferredProtocols);
+        void Connect(string Reader, DemoSCardService.SCardNPService.SHARE ShareMode, DemoSCardService.SCardNPService.PROTOCOL PreferredProtocols);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteCard/Disconnect", ReplyAction="http://tempuri.org/IRemoteCard/DisconnectResponse")]
-        void Disconnect(TestSCardService.SCardNPService.DISCONNECT Disposition);
+        void Disconnect(DemoSCardService.SCardNPService.DISCONNECT Disposition);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteCard/Transmit", ReplyAction="http://tempuri.org/IRemoteCard/TransmitResponse")]
-        TestSCardService.SCardNPService.APDUResponse Transmit(TestSCardService.SCardNPService.APDUCommand ApduCmd);
+        DemoSCardService.SCardNPService.APDUResponse Transmit(DemoSCardService.SCardNPService.APDUCommand ApduCmd);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteCard/BeginTransaction", ReplyAction="http://tempuri.org/IRemoteCard/BeginTransactionResponse")]
         void BeginTransaction();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteCard/EndTransaction", ReplyAction="http://tempuri.org/IRemoteCard/EndTransactionResponse")]
-        void EndTransaction(TestSCardService.SCardNPService.DISCONNECT Disposition);
+        void EndTransaction(DemoSCardService.SCardNPService.DISCONNECT Disposition);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteCard/GetAttribute", ReplyAction="http://tempuri.org/IRemoteCard/GetAttributeResponse")]
         byte[] GetAttribute(uint AttribId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IRemoteCardChannel : TestSCardService.SCardNPService.IRemoteCard, System.ServiceModel.IClientChannel {
+    public interface IRemoteCardChannel : DemoSCardService.SCardNPService.IRemoteCard, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class RemoteCardClient : System.ServiceModel.ClientBase<TestSCardService.SCardNPService.IRemoteCard>, TestSCardService.SCardNPService.IRemoteCard {
+    public partial class RemoteCardClient : System.ServiceModel.ClientBase<DemoSCardService.SCardNPService.IRemoteCard>, DemoSCardService.SCardNPService.IRemoteCard {
         
         public RemoteCardClient() {
         }
@@ -326,15 +326,15 @@ namespace TestSCardService.SCardNPService {
             return base.Channel.ListReaders();
         }
         
-        public void Connect(string Reader, TestSCardService.SCardNPService.SHARE ShareMode, TestSCardService.SCardNPService.PROTOCOL PreferredProtocols) {
+        public void Connect(string Reader, DemoSCardService.SCardNPService.SHARE ShareMode, DemoSCardService.SCardNPService.PROTOCOL PreferredProtocols) {
             base.Channel.Connect(Reader, ShareMode, PreferredProtocols);
         }
         
-        public void Disconnect(TestSCardService.SCardNPService.DISCONNECT Disposition) {
+        public void Disconnect(DemoSCardService.SCardNPService.DISCONNECT Disposition) {
             base.Channel.Disconnect(Disposition);
         }
         
-        public TestSCardService.SCardNPService.APDUResponse Transmit(TestSCardService.SCardNPService.APDUCommand ApduCmd) {
+        public DemoSCardService.SCardNPService.APDUResponse Transmit(DemoSCardService.SCardNPService.APDUCommand ApduCmd) {
             return base.Channel.Transmit(ApduCmd);
         }
         
@@ -342,7 +342,7 @@ namespace TestSCardService.SCardNPService {
             base.Channel.BeginTransaction();
         }
         
-        public void EndTransaction(TestSCardService.SCardNPService.DISCONNECT Disposition) {
+        public void EndTransaction(DemoSCardService.SCardNPService.DISCONNECT Disposition) {
             base.Channel.EndTransaction(Disposition);
         }
         

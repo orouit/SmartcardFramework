@@ -7,8 +7,8 @@
     <ProjectGuid>{8E8E2885-A5BD-4FAC-9FE4-D9727D606356}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestSCardService</RootNamespace>
-    <AssemblyName>TestSCardService</AssemblyName>
+    <RootNamespace>DemoSCardService</RootNamespace>
+    <AssemblyName>DemoSCardService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -64,6 +64,9 @@
     <None Include="Service References\SCardNPService\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\SCardNPService\DemoSCardService.SCardNPService.APDUResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\SCardNPService\GemCard.Service.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -77,11 +80,11 @@
     <None Include="Service References\SCardNPService\service1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\SCardNPService\TestSCardService.SCardNPService.APDUResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Service References\SCardService\Arrays.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SCardService\DemoSCardService.SCardService.APDUResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\SCardService\GemCard.Service.xsd">
       <SubType>Designer</SubType>
@@ -95,9 +98,6 @@
     </None>
     <None Include="Service References\SCardService\service1.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\SCardService\TestSCardService.SCardService.APDUResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
