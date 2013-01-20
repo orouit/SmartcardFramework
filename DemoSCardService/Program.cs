@@ -5,6 +5,10 @@ using System.Text;
 
 namespace TestSCardService
 {
+    /// <summary>
+    /// Define NET_TCP to connect to the TCP service, otherwise it is using the
+    /// NamedPipe service
+    /// </summary>
     class Program
     {
         const byte 

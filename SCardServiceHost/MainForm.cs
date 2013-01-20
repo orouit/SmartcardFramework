@@ -15,22 +15,34 @@ using System.Windows.Forms;
 
 namespace GemCard.Service.Host
 {
+    /// <summary>
+    /// Windows form to host the SCardService
+    /// If NET_TCP is defined, the service is using a NetTCPBinding,
+    /// otherwise it is using NamedPipeBinding
+    /// </summary>
     public partial class MainForm : Form
     {
         const string 
+#if NET_TCP
             NET_TCP_BASE_ADDRESS = "net.tcp://localhost:8001/",
+#else
             NET_NAMED_PIPE_BASE_ADDRESS = "net.pipe://localhost/",
+#endif
             SERVCICE_ADDRESS = "SCardService";
 
-        //private ServiceHostManager<IRemoteCard, RemoteCard> scardService = null;
-        private NamedPipeServiceHostManager<IRemoteCard, RemoteCard> scardService = null;
+#if NET_TCP
+        private TCPServiceHostManager<IRemoteCard, RemoteCard> 
+#else
+        private NamedPipeServiceHostManager<IRemoteCard, RemoteCard> 
+#endif
+            scardService = null;
 
         public MainForm()
         {
             InitializeComponent();
 
 #if NET_TCP
-            scardService = new ServiceHostManager<IRemoteCard, RemoteCard>(NET_TCP_BASE_ADDRESS, SERVCICE_ADDRESS);
+            scardService = new TCPServiceHostManager<IRemoteCard, RemoteCard>(NET_TCP_BASE_ADDRESS, SERVCICE_ADDRESS);
 #else
             scardService = new NamedPipeServiceHostManager<IRemoteCard, RemoteCard>(NET_NAMED_PIPE_BASE_ADDRESS, SERVCICE_ADDRESS);
 #endif
