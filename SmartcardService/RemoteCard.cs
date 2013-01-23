@@ -9,10 +9,16 @@ using GemCard;
 
 namespace GemCard.Service
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
+    /// <summary>
+    /// Implements the IRemoteCard interface as WCF service
+    /// 
+    /// This class uses the CardNative object that implements the ICard interface
+    /// </summary>
     public class RemoteCard : IRemoteCard
     {
-        CardNative card = new CardNative();
+        private CardNative card = new CardNative();
+
+        #region ICard interface
 
         public string[] ListReaders()
         {
@@ -63,5 +69,7 @@ namespace GemCard.Service
         {
             return card.GetAttribute(attribId); ;
         }
+
+        #endregion
     }
 }

@@ -7,6 +7,11 @@ using System.Text;
 
 namespace GemCard.Service
 {
+    /// <summary>
+    /// This class represents an APDU Response from a card command.
+    /// 
+    /// It is a DataContract to be serializd by a WCF service request
+    /// </summary>
     [DataContract]
     public class APDUResponse
     {
@@ -40,6 +45,5 @@ namespace GemCard.Service
             get;
             set;
         }
-
     }
 }

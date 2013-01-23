@@ -7,6 +7,11 @@ using System.Text;
 
 namespace GemCard.Service
 {
+    /// <summary>
+    /// This class represents an APDU command to send to a smart card.
+    /// 
+    /// It is a DataContract to be serializd by a WCF service request
+    /// </summary>
     [DataContract]
     public class APDUCommand
     {
@@ -20,7 +25,6 @@ namespace GemCard.Service
             set;
         }
 
-
         /// <summary>
         /// Get/set the Instruction (Ins) of the command
         /// </summary>
@@ -30,7 +34,6 @@ namespace GemCard.Service
             get;
             set;
         }
-
 
         /// <summary>
         /// Get/set the Parameter P1 of the command
@@ -42,7 +45,6 @@ namespace GemCard.Service
             set;
         }
 
-
         /// <summary>
         /// Get/set the Parameter P2 of the command
         /// </summary>
@@ -53,7 +55,6 @@ namespace GemCard.Service
             set;
         }
 
-
         /// <summary>
         /// Get/set the Data of the command
         /// </summary>
@@ -63,7 +64,6 @@ namespace GemCard.Service
             get;
             set;
         }
-
 
         /// <summary>
         /// Get/set the expected Length (Le) of the command
