@@ -37,12 +37,17 @@ namespace GemCard.Service
 
         public APDUResponse Transmit(APDUCommand apduCmd)
         {
+            if (apduCmd.Data == null || apduCmd.Data.Length == 0)
+            {
+
+            }
+
             GemCard.APDUCommand apduCommand = new GemCard.APDUCommand(
                 apduCmd.Class,
                 apduCmd.Ins,
                 apduCmd.P1,
                 apduCmd.P2,
-                apduCmd.Data,
+                (apduCmd.Data == null || apduCmd.Data.Length == 0) ? null : apduCmd.Data,
                 apduCmd.Le);
  
             GemCard.APDUResponse apduResponse = card.Transmit(apduCommand);

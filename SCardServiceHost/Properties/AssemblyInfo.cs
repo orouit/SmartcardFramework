@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SCardServiceHost")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("WCF host for the Smart card service")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SCardServiceHost")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright © 2013, Olivier Rouit")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
