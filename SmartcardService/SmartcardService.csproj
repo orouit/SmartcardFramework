@@ -46,9 +46,13 @@
   <ItemGroup>
     <Compile Include="APDUCommand.cs" />
     <Compile Include="APDUResponse.cs" />
+    <Compile Include="BaseFault.cs" />
+    <Compile Include="CommandFault.cs" />
+    <Compile Include="GeneralFault.cs" />
     <Compile Include="IRemoteCard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteCard.cs" />
+    <Compile Include="SmartcardFault.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

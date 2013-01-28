@@ -5,9 +5,9 @@ namespace GemCard
 	/// <summary>
 	///  Smart card exceptions
 	/// </summary>
+    [Serializable]
 	public class SmartCardException : Exception
 	{
-
 		public SmartCardException() : base("Smart card exception")
 		{
 		}
@@ -17,10 +17,10 @@ namespace GemCard
 		}
 	}
 
-
+    [Serializable]
     public class ApduCommandException : Exception
     {
-		public const	string
+		public const string
 			NotValidDocument = "The file is not a valid APDU command document",
 			NoSuchCommand = "No such APDU command in the document",
             ParamLeFormat = "Le parameter format is not correct",
@@ -35,6 +35,5 @@ namespace GemCard
 		public ApduCommandException(string Message) : base(Message)
 		{
 		}
-
     }
 }
