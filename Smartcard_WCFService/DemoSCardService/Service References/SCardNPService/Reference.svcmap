@@ -25,6 +25,7 @@
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a6c22f9a-25aa-4d6c-ba85-9f3fc0e5f901" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="217260bd-9069-463d-84ff-8a3ac061a148" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="d9233aaa-c257-4897-b166-d17aca8f79a1" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
+    <MetadataFile FileName="GemCard.Service.Fault.xsd" MetadataType="Schema" ID="7e575bc9-3ffc-4eac-b082-ec5141275f7f" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
     <MetadataFile FileName="GemCard.xsd" MetadataType="Schema" ID="d2b1a975-05db-424f-9fb1-1cf0dfbbfe10" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
     <MetadataFile FileName="GemCard.Service.xsd" MetadataType="Schema" ID="25f7c501-2cba-4ed8-8bfd-a988e08fee1d" SourceId="1" SourceUrl="net.pipe://localhost/SCardService/mex" />
   </Metadata>

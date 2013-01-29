@@ -283,6 +283,8 @@ namespace GemCard
 
 			ReleaseContext();
 
+            ThrowSmartcardException("SCardListReaders", m_nLastError);
+
 			return sListReaders;
 		}
 
@@ -303,10 +305,8 @@ namespace GemCard
 			m_nLastError = SCardEstablishContext((uint) Scope, IntPtr.Zero, IntPtr.Zero, hContext);
 			if (m_nLastError != 0)
 			{
-				string msg = "SCardEstablishContext error: " + m_nLastError;
-
 				Marshal.FreeHGlobal(hContext);
-				throw new Exception(msg);
+                ThrowSmartcardException("SCardEstablishContext", m_nLastError);
 			}
 
             m_hContext = Marshal.ReadIntPtr(hContext);
@@ -326,12 +326,7 @@ namespace GemCard
 			if (SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
 			{
 				m_nLastError = SCardReleaseContext(m_hContext);
-
-				if (m_nLastError != 0)
-				{
-					string	msg = "SCardReleaseContext error: " + m_nLastError;
-					throw new Exception(msg);
-				}
+                ThrowSmartcardException("SCardReleaseContext", m_nLastError);
 
                 m_hContext = IntPtr.Zero;
 			}
@@ -367,11 +362,9 @@ namespace GemCard
 
 			if (m_nLastError != 0)
 			{
-				string msg = "SCardConnect error: " + m_nLastError;
-
 				Marshal.FreeHGlobal(hCard);
 				Marshal.FreeHGlobal(pProtocol);
-				throw new Exception(msg);
+                ThrowSmartcardException("SCardConnect", m_nLastError);
 			}
 
             m_hCard = Marshal.ReadIntPtr(hCard);
@@ -396,13 +389,14 @@ namespace GemCard
 				m_nLastError = SCardDisconnect(m_hCard, (uint) Disposition);
                 m_hCard = IntPtr.Zero;
 
-				if (m_nLastError != 0)
-				{
-					string msg = "SCardDisconnect error: " + m_nLastError;
-					throw new Exception(msg);
-				}
-
-				ReleaseContext();
+                try
+                {
+                    ThrowSmartcardException("SCardDisconnect", m_nLastError);
+                }
+                finally
+                {
+                    ReleaseContext();
+                }
 			}
 		}
 
@@ -434,16 +428,15 @@ namespace GemCard
 			{
 				ApduBuffer = new byte[APDUCommand.APDU_MIN_LENGTH + ((ApduCmd.Le != 0) ? 1 : 0)];
 
-				if (ApduCmd.Le != 0)
-					ApduBuffer[4] = (byte) ApduCmd.Le;
+                if (ApduCmd.Le != 0)
+                {
+                    ApduBuffer[4] = (byte)ApduCmd.Le;
+                }
 			}
 			else
 			{
 				ApduBuffer = new byte[APDUCommand.APDU_MIN_LENGTH + 1 + ApduCmd.Data.Length];
-
-				for (int nI = 0; nI < ApduCmd.Data.Length; nI++)
-					ApduBuffer[APDUCommand.APDU_MIN_LENGTH + 1 + nI] = ApduCmd.Data[nI];
-
+                Buffer.BlockCopy(ApduCmd.Data, 0, ApduBuffer, APDUCommand.APDU_MIN_LENGTH + 1, ApduCmd.Data.Length);
 				ApduBuffer[APDUCommand.APDU_MIN_LENGTH] = (byte) ApduCmd.Data.Length;
 			}
 
@@ -452,17 +445,11 @@ namespace GemCard
 			ApduBuffer[2] = ApduCmd.P1;
 			ApduBuffer[3] = ApduCmd.P2;
 
-			m_nLastError = SCardTransmit(m_hCard, ref ioRequest, ApduBuffer, (uint) ApduBuffer.Length, IntPtr.Zero, ApduResponse, out RecvLength); 
-			if (m_nLastError != 0)
-			{
-				string msg = "SCardTransmit error: " + m_nLastError;
-				throw new Exception(msg);
-			}
+			m_nLastError = SCardTransmit(m_hCard, ref ioRequest, ApduBuffer, (uint) ApduBuffer.Length, IntPtr.Zero, ApduResponse, out RecvLength);
+            ThrowSmartcardException("SCardTransmit", m_nLastError);
 			
 			byte[] ApduData = new byte[RecvLength];
-
-			for (int nI = 0; nI < RecvLength; nI++)
-				ApduData[nI] = ApduResponse[nI];
+            Buffer.BlockCopy(ApduResponse, 0, ApduData, 0, (int)RecvLength); 
 
 			return new APDUResponse(ApduData);
 		}
@@ -479,11 +466,7 @@ namespace GemCard
             if (SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
             {
                 m_nLastError = SCardBeginTransaction(m_hCard);
-                if (m_nLastError != 0)
-                {
-                    string msg = "SCardBeginTransaction error: " + m_nLastError;
-                    throw new Exception(msg);
-                }
+                ThrowSmartcardException("SCardBeginTransaction", m_nLastError);
             }
         }
 
@@ -500,11 +483,7 @@ namespace GemCard
             if (SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
             {
                 m_nLastError = SCardEndTransaction(m_hCard, (UInt32)Disposition);
-                if (m_nLastError != 0)
-                {
-                    string msg = "SCardEndTransaction error: " + m_nLastError;
-                    throw new Exception(msg);
-                }
+                ThrowSmartcardException("SCardEndTransaction", m_nLastError);
             }
         }
 
@@ -519,23 +498,13 @@ namespace GemCard
             UInt32 attrLen = 0;
 
             m_nLastError = SCardGetAttrib(m_hCard, AttribId, attr, out attrLen);
-            if (m_nLastError == 0)
+            ThrowSmartcardException("SCardGetAttr", m_nLastError);
+
+            if (attrLen != 0)
             {
-                if (attrLen != 0)
-                {
-                    attr = new byte[attrLen];
-                    m_nLastError = SCardGetAttrib(m_hCard, AttribId, attr, out attrLen);
-                    if (m_nLastError != 0)
-                    {
-                        string msg = "SCardGetAttr error: " + m_nLastError;
-                        throw new Exception(msg);
-                    }
-                }
-            }
-            else
-            {
-                string msg = "SCardGetAttr error: " + m_nLastError;
-                throw new Exception(msg);
+                attr = new byte[attrLen];
+                m_nLastError = SCardGetAttrib(m_hCard, AttribId, attr, out attrLen);
+                ThrowSmartcardException("SCardGetAttr", m_nLastError);
             }
 
             return attr;
@@ -631,6 +600,14 @@ namespace GemCard
             Disconnect(DISCONNECT.Unpower);
 
             ReleaseContext();
+        }
+
+        private void ThrowSmartcardException(string methodName, long errCode)
+        {
+            if (errCode != 0)
+            {
+                throw new SmartCardException(string.Format("{0} error: {1:X02}", methodName, errCode));
+            }
         }
     }
 }

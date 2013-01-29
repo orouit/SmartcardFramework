@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="GeneralFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GeneralFault" nillable="true" type="tns:GeneralFault" />
+  <xs:complexType name="SmartcardFault">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:GeneralFault">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SmartcardFault" nillable="true" type="tns:SmartcardFault" />
+  <xs:complexType name="ApduCommandFault">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:GeneralFault">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ApduCommandFault" nillable="true" type="tns:ApduCommandFault" />
+</xs:schema>

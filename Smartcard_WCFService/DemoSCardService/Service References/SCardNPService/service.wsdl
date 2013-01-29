@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="RemoteCard" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetNamedPipeBinding_IRemoteCard_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
+        </msb:BinaryEncoding>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256>
+                </sp:Basic256>
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict>
+                </sp:Strict>
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing>
+        </wsaw:UsingAddressing>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import namespace="http://tempuri.org/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/GemCard" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/GemCard.Service" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IRemoteCard_ListReaders_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListReaders" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_ListReaders_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListReadersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_ListReaders_GeneralFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q1:GeneralFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_ListReaders_SmartcardFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q2:SmartcardFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Connect_InputMessage">
+    <wsdl:part name="parameters" element="tns:Connect" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Connect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Connect_SmartcardFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q3:SmartcardFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Connect_GeneralFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q4:GeneralFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Disconnect_InputMessage">
+    <wsdl:part name="parameters" element="tns:Disconnect" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Disconnect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisconnectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Disconnect_GeneralFaultFault_FaultMessage">
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q5:GeneralFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Disconnect_SmartcardFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q6:SmartcardFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Transmit_InputMessage">
+    <wsdl:part name="parameters" element="tns:Transmit" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Transmit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransmitResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Transmit_GeneralFaultFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q7:GeneralFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Transmit_ApduCommandFaultFault_FaultMessage">
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q8:ApduCommandFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_Transmit_SmartcardFaultFault_FaultMessage">
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q9:SmartcardFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_BeginTransaction_InputMessage">
+    <wsdl:part name="parameters" element="tns:BeginTransaction" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_BeginTransaction_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BeginTransactionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_BeginTransaction_GeneralFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q10:GeneralFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_BeginTransaction_SmartcardFaultFault_FaultMessage">
+    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q11:SmartcardFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_EndTransaction_InputMessage">
+    <wsdl:part name="parameters" element="tns:EndTransaction" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_EndTransaction_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EndTransactionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_EndTransaction_GeneralFaultFault_FaultMessage">
+    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q12:GeneralFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_EndTransaction_SmartcardFaultFault_FaultMessage">
+    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q13:SmartcardFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_GetAttribute_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAttribute" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_GetAttribute_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAttributeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_GetAttribute_SmartcardFaultFault_FaultMessage">
+    <wsdl:part xmlns:q14="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q14:SmartcardFault" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCard_GetAttribute_GeneralFaultFault_FaultMessage">
+    <wsdl:part xmlns:q15="http://schemas.datacontract.org/2004/07/GemCard.Service.Fault" name="detail" element="q15:GeneralFault" />
+  </wsdl:message>
+  <wsdl:portType name="IRemoteCard">
+    <wsdl:operation name="ListReaders">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCard/ListReaders" message="tns:IRemoteCard_ListReaders_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCard/ListReadersResponse" message="tns:IRemoteCard_ListReaders_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/ListReadersGeneralFaultFault" name="GeneralFaultFault" message="tns:IRemoteCard_ListReaders_GeneralFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/ListReadersSmartcardFaultFault" name="SmartcardFaultFault" message="tns:IRemoteCard_ListReaders_SmartcardFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Connect">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCard/Connect" message="tns:IRemoteCard_Connect_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCard/ConnectResponse" message="tns:IRemoteCard_Connect_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/ConnectSmartcardFaultFault" name="SmartcardFaultFault" message="tns:IRemoteCard_Connect_SmartcardFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/ConnectGeneralFaultFault" name="GeneralFaultFault" message="tns:IRemoteCard_Connect_GeneralFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Disconnect">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCard/Disconnect" message="tns:IRemoteCard_Disconnect_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCard/DisconnectResponse" message="tns:IRemoteCard_Disconnect_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/DisconnectGeneralFaultFault" name="GeneralFaultFault" message="tns:IRemoteCard_Disconnect_GeneralFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/DisconnectSmartcardFaultFault" name="SmartcardFaultFault" message="tns:IRemoteCard_Disconnect_SmartcardFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Transmit">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCard/Transmit" message="tns:IRemoteCard_Transmit_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCard/TransmitResponse" message="tns:IRemoteCard_Transmit_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/TransmitGeneralFaultFault" name="GeneralFaultFault" message="tns:IRemoteCard_Transmit_GeneralFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/TransmitApduCommandFaultFault" name="ApduCommandFaultFault" message="tns:IRemoteCard_Transmit_ApduCommandFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/TransmitSmartcardFaultFault" name="SmartcardFaultFault" message="tns:IRemoteCard_Transmit_SmartcardFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BeginTransaction">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCard/BeginTransaction" message="tns:IRemoteCard_BeginTransaction_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCard/BeginTransactionResponse" message="tns:IRemoteCard_BeginTransaction_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/BeginTransactionGeneralFaultFault" name="GeneralFaultFault" message="tns:IRemoteCard_BeginTransaction_GeneralFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/BeginTransactionSmartcardFaultFault" name="SmartcardFaultFault" message="tns:IRemoteCard_BeginTransaction_SmartcardFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndTransaction">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCard/EndTransaction" message="tns:IRemoteCard_EndTransaction_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCard/EndTransactionResponse" message="tns:IRemoteCard_EndTransaction_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/EndTransactionGeneralFaultFault" name="GeneralFaultFault" message="tns:IRemoteCard_EndTransaction_GeneralFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/EndTransactionSmartcardFaultFault" name="SmartcardFaultFault" message="tns:IRemoteCard_EndTransaction_SmartcardFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAttribute">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCard/GetAttribute" message="tns:IRemoteCard_GetAttribute_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCard/GetAttributeResponse" message="tns:IRemoteCard_GetAttribute_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/GetAttributeSmartcardFaultFault" name="SmartcardFaultFault" message="tns:IRemoteCard_GetAttribute_SmartcardFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCard/GetAttributeGeneralFaultFault" name="GeneralFaultFault" message="tns:IRemoteCard_GetAttribute_GeneralFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetNamedPipeBinding_IRemoteCard" type="tns:IRemoteCard">
+    <wsp:PolicyReference URI="#NetNamedPipeBinding_IRemoteCard_policy">
+    </wsp:PolicyReference>
+    <soap12:binding transport="http://schemas.microsoft.com/soap/named-pipe" />
+    <wsdl:operation name="ListReaders">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCard/ListReaders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GeneralFaultFault">
+        <soap12:fault use="literal" name="GeneralFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SmartcardFaultFault">
+        <soap12:fault use="literal" name="SmartcardFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Connect">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCard/Connect" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SmartcardFaultFault">
+        <soap12:fault use="literal" name="SmartcardFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="GeneralFaultFault">
+        <soap12:fault use="literal" name="GeneralFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Disconnect">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCard/Disconnect" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GeneralFaultFault">
+        <soap12:fault use="literal" name="GeneralFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SmartcardFaultFault">
+        <soap12:fault use="literal" name="SmartcardFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Transmit">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCard/Transmit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GeneralFaultFault">
+        <soap12:fault use="literal" name="GeneralFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="ApduCommandFaultFault">
+        <soap12:fault use="literal" name="ApduCommandFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SmartcardFaultFault">
+        <soap12:fault use="literal" name="SmartcardFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="BeginTransaction">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCard/BeginTransaction" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GeneralFaultFault">
+        <soap12:fault use="literal" name="GeneralFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SmartcardFaultFault">
+        <soap12:fault use="literal" name="SmartcardFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="EndTransaction">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCard/EndTransaction" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GeneralFaultFault">
+        <soap12:fault use="literal" name="GeneralFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="SmartcardFaultFault">
+        <soap12:fault use="literal" name="SmartcardFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetAttribute">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCard/GetAttribute" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SmartcardFaultFault">
+        <soap12:fault use="literal" name="SmartcardFaultFault" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="GeneralFaultFault">
+        <soap12:fault use="literal" name="GeneralFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RemoteCard">
+    <wsdl:port name="NetNamedPipeBinding_IRemoteCard" binding="tns:NetNamedPipeBinding_IRemoteCard">
+      <soap12:address location="net.pipe://localhost/SCardService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.pipe://localhost/SCardService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>orouit@consistel.com</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

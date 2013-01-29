@@ -15,11 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadPhonebook", "Smartcard_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GemCard64", "Smartcard_API\GemCard\GemCard64.csproj", "{F10955ED-3081-493D-8AD5-B243C622B855}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartcardService", "SmartcardService\SmartcardService.csproj", "{15B3E0D2-6217-493A-A690-158C497F5318}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WCFService", "WCFService", "{90A667C2-4CF2-46FA-B6D2-83099D97BDB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCardServiceHost", "SCardServiceHost\SCardServiceHost.csproj", "{457CCCC6-C911-4623-84AA-5072721853DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartcardService", "Smartcard_WCFService\SmartcardService\SmartcardService.csproj", "{15B3E0D2-6217-493A-A690-158C497F5318}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSCardService", "DemoSCardService\DemoSCardService.csproj", "{8E8E2885-A5BD-4FAC-9FE4-D9727D606356}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCardServiceHost", "Smartcard_WCFService\SCardServiceHost\SCardServiceHost.csproj", "{457CCCC6-C911-4623-84AA-5072721853DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSCardService", "Smartcard_WCFService\DemoSCardService\DemoSCardService.csproj", "{8E8E2885-A5BD-4FAC-9FE4-D9727D606356}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -198,5 +200,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{15B3E0D2-6217-493A-A690-158C497F5318} = {90A667C2-4CF2-46FA-B6D2-83099D97BDB3}
+		{457CCCC6-C911-4623-84AA-5072721853DE} = {90A667C2-4CF2-46FA-B6D2-83099D97BDB3}
+		{8E8E2885-A5BD-4FAC-9FE4-D9727D606356} = {90A667C2-4CF2-46FA-B6D2-83099D97BDB3}
 	EndGlobalSection
 EndGlobal

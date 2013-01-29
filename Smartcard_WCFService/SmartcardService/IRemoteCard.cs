@@ -21,8 +21,8 @@ namespace GemCard.Service
         /// </summary>
         /// <returns>A string array of the readers</returns>
         [OperationContract]
-        //[FaultContract(typeof(SmartcardFault))]
-        //[FaultContract(typeof(GeneralFault))]
+        [FaultContract(typeof(SmartcardFault))]
+        [FaultContract(typeof(GeneralFault))]
         string[] ListReaders();
 
         /// <summary>
@@ -32,8 +32,8 @@ namespace GemCard.Service
         /// <param name="ShareMode">Session share mode</param>
         /// <param name="PreferredProtocols">Session preferred protocol</param>
         [OperationContract]
-        //[FaultContract(typeof(SmartcardFault))]
-        //[FaultContract(typeof(GeneralFault))]        
+        [FaultContract(typeof(SmartcardFault))]
+        [FaultContract(typeof(GeneralFault))]        
         void Connect(string Reader, SHARE ShareMode, PROTOCOL PreferredProtocols);
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace GemCard.Service
         /// </summary>
         /// <param name="Disposition">Action when disconnecting from the card</param>
         [OperationContract]
-        //[FaultContract(typeof(SmartcardFault))]
-        //[FaultContract(typeof(GeneralFault))]
+        [FaultContract(typeof(SmartcardFault))]
+        [FaultContract(typeof(GeneralFault))]
         void Disconnect(DISCONNECT Disposition);
 
         /// <summary>
@@ -51,25 +51,24 @@ namespace GemCard.Service
         /// <param name="ApduCmd">APDU Command to send to the card</param>
         /// <returns>An APDU Response from the card</returns>
         [OperationContract]
-        //[FaultContract(typeof(ApduCommandFault))]
-        //[FaultContract(typeof(SmartcardFault))]
-        //[FaultContract(typeof(GeneralFault))]
+        [FaultContract(typeof(SmartcardFault))]
+        [FaultContract(typeof(GeneralFault))]
         APDUResponse Transmit(APDUCommand ApduCmd);
 
         /// <summary>
         /// Begins a card transaction
         /// </summary>
         [OperationContract]
-        //[FaultContract(typeof(SmartcardFault))]
-        //[FaultContract(typeof(GeneralFault))]
+        [FaultContract(typeof(SmartcardFault))]
+        [FaultContract(typeof(GeneralFault))]
         void BeginTransaction();
 
         /// <summary>
         /// Ends a card transaction
         /// </summary>
         [OperationContract]
-        //[FaultContract(typeof(SmartcardFault))]
-        //[FaultContract(typeof(GeneralFault))]
+        [FaultContract(typeof(SmartcardFault))]
+        [FaultContract(typeof(GeneralFault))]
         void EndTransaction(DISCONNECT Disposition);
 
         /// <summary>
@@ -80,8 +79,8 @@ namespace GemCard.Service
         /// <param name="AttribId">Identifier for the Attribute to get</param>
         /// <returns>Attribute content</returns>
         [OperationContract]
-        //[FaultContract(typeof(SmartcardFault))]
-        //[FaultContract(typeof(GeneralFault))]
+        [FaultContract(typeof(SmartcardFault))]
+        [FaultContract(typeof(GeneralFault))]
         byte[] GetAttribute(UInt32 AttribId);
     }
 }

@@ -7,15 +7,14 @@ using System.Text;
 namespace GemCard.Service.Fault
 {
     [DataContract]
-    public class GeneralFault : IFault<Exception> //: BaseFault<Exception>
+    public class GeneralFault 
     {
         [DataMember]
-        public Exception SourceException { get; private set; }
+        public string Message { get; private set; }
 
         public GeneralFault(Exception ex)
-            //: base(ex)
         {
-            SourceException = ex;
+            Message = ex.Message;
         }
     }
 }

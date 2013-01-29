@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ServiceModel;
 
 namespace DemoSCardService
 {
@@ -143,6 +144,8 @@ namespace DemoSCardService
 
                 if (readers.Length > 0)
                 {
+                    // Make sure the card is not connected before calling Connect
+                    remoteCard.Disconnect(SCardService.DISCONNECT.Unpower);
                     remoteCard.Connect(readers[0], SCardService.SHARE.Shared, SCardService.PROTOCOL.T0orT1);
                     Console.WriteLine("Session opened with the remote card on reader " + readers[0]);
 
@@ -180,35 +183,63 @@ namespace DemoSCardService
                     SCardService.APDUResponse response = remoteCard.Transmit(apduSelectFile);
                     if (response.SW1 == SC_PENDING)
                     {
-                        // Select EFtelecom
-                        apduSelectFile.Data = new byte[] { 0x7F, 0x10 };
+                        try
+                        {
+                            // After the fault the service is not faulty but the communication with the card is broken
+                            // Session must be opened again and commands sent again
+                            apduGetResponse.Le = response.SW2;
+                            apduGetResponse.Data = new byte[] { 0x3F, 0x00 };   // Create a fault
+
+                            response = remoteCard.Transmit(apduGetResponse);
+                        }
+                        catch (FaultException<SCardService.SmartcardFault> apduFault)
+                        {
+                            Console.WriteLine("Service throw a FaultException: " + apduFault.Detail.Message);
+                        }
+
+                        // Reset the apduGetResponse command
+                        apduGetResponse.Data = null;
+                        
+                        // Connect to the card again
+                        Console.WriteLine("Disconnect and re-connect after the PC/SC transmit was set to a fault state");
+                        remoteCard.Disconnect(SCardService.DISCONNECT.Reset);
+
+                        remoteCard.Connect(readers[0], SCardService.SHARE.Shared, SCardService.PROTOCOL.T0orT1);
+                                            // Select MF
+                        apduSelectFile.Data = new byte[] { 0x3F, 0x00 };
                         response = remoteCard.Transmit(apduSelectFile);
                         if (response.SW1 == SC_PENDING)
                         {
-                            // Select EFadn
-                            apduSelectFile.Data = new byte[] { 0x6F, 0x3A };
+                            // Select EFtelecom
+                            apduSelectFile.Data = new byte[] { 0x7F, 0x10 };
                             response = remoteCard.Transmit(apduSelectFile);
                             if (response.SW1 == SC_PENDING)
                             {
-                                apduGetResponse.Le = response.SW2;
-                                response = remoteCard.Transmit(apduGetResponse);
-                                if (response.SW1 == SC_OK_HI)
+                                // Select EFadn
+                                apduSelectFile.Data = new byte[] { 0x6F, 0x3A };
+                                response = remoteCard.Transmit(apduSelectFile);
+                                if (response.SW1 == SC_PENDING)
                                 {
-                                    // Get the length of the record
-                                    int recordLength = response.Data[14];
-
-                                    Console.WriteLine("Reading the Phone number 10 first entries");
-                                    // Read the 10 first record of the file
-                                    for (int nI = 0; nI < 10; nI++)
+                                    apduGetResponse.Le = response.SW2;
+                                    response = remoteCard.Transmit(apduGetResponse);
+                                    if (response.SW1 == SC_OK_HI)
                                     {
-                                        apduReadRecord.Le = (byte)recordLength;
-                                        apduReadRecord.P1 = (byte)(nI + 1);
-                                        response = remoteCard.Transmit(apduReadRecord);
+                                        // Get the length of the record
+                                        int recordLength = response.Data[14];
 
-                                        if (response.SW1 == SC_OK_HI)
+                                        Console.WriteLine("Reading the Phone number 10 first entries");
+                                        // Read the 10 first record of the file
+                                        for (int nI = 0; nI < 10; nI++)
                                         {
-                                            Console.WriteLine("Record #" + (nI + 1).ToString());
-                                            Console.WriteLine(BufferToString(response.Data));
+                                            apduReadRecord.Le = (byte)recordLength;
+                                            apduReadRecord.P1 = (byte)(nI + 1);
+                                            response = remoteCard.Transmit(apduReadRecord);
+
+                                            if (response.SW1 == SC_OK_HI)
+                                            {
+                                                Console.WriteLine("Record #" + (nI + 1).ToString());
+                                                Console.WriteLine(BufferToString(response.Data));
+                                            }
                                         }
                                     }
                                 }

@@ -7,15 +7,11 @@ using System.Text;
 namespace GemCard.Service.Fault
 {
     [DataContract]
-    public class SmartcardFault : IFault<SmartCardException> // : BaseFault<SmartCardException>
+    public class SmartcardFault : GeneralFault
     {
-        [DataMember]
-        public SmartCardException SourceException { get; private set; }
-
         public SmartcardFault(SmartCardException ex)
-            //: base(ex)
+            : base(ex)
         {
-            SourceException = ex;
         }
     }
 }
