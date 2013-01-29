@@ -1,4 +1,10 @@
-﻿using System;
+﻿/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
