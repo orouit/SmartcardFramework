@@ -515,7 +515,7 @@ namespace TestGemCard
         /// <summary>
         /// CardRemovedEventHandler
         /// </summary>
-        private void m_iCard_OnCardRemoved(string reader)
+        private void m_iCard_OnCardRemoved(object sender, string reader)
         {
             btnConnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] {btnConnect, false});
             btnDisconnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnDisconnect, false });
@@ -531,7 +531,7 @@ namespace TestGemCard
         /// <summary>
         /// CardInsertedEventHandler
         /// </summary>
-        private void m_iCard_OnCardInserted(string reader)
+        private void m_iCard_OnCardInserted(object sender, string reader)
         {
             btnConnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnConnect, true });
             btnDisconnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnDisconnect, false });

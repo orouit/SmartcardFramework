@@ -48,19 +48,9 @@ namespace GemCard
     }
 
     /// <summary>
-    /// Delegate for the CardInserted event
-    /// </summary>
-    public delegate void CardInsertedEventHandler(string reader);
-
-    /// <summary>
-    /// Delegate for the CardRemoved event
-    /// </summary>
-    public delegate void CardRemovedEventHandler(string reader);
-
-    /// <summary>
     /// Abstract class that adds a basic event management to the ICard interface. 
     /// </summary>
-    abstract public class CardBase : ICard
+    abstract public class CardBase : ICard, IDisposable
     {
         protected const uint INFINITE = 0xFFFFFFFF;
         protected const uint WAIT_TIME = 250;
@@ -159,14 +149,19 @@ namespace GemCard
         protected void CardInserted(string reader)
         {
             if (OnCardInserted != null)
-                OnCardInserted(reader);
+                OnCardInserted(this, reader);
         }
 
         protected void CardRemoved(string reader)
         {
             if (OnCardRemoved != null)
-                OnCardRemoved(reader);
+                OnCardRemoved(this, reader);
         }
         #endregion
+
+        public void Dispose()
+        {
+            StopCardEvents();
+        }
     }
 }

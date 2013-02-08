@@ -2,11 +2,32 @@ using System;
 
 namespace GemCard
 {
+    /// <summary>
+    /// Delegate for the CardInserted event
+    /// </summary>
+    public delegate void CardInsertedEventHandler(object sender, string reader);
+
+    /// <summary>
+    /// Delegate for the CardRemoved event
+    /// </summary>
+    public delegate void CardRemovedEventHandler(object sender, string reader);
+
+
 	/// <summary>
 	/// This interface gives access to the basic card functions. It must be implemented by a class.
 	/// </summary>
 	public interface	ICard
 	{
+        /// <summary>
+        /// Event handler for the card insertion
+        /// </summary>
+        event CardInsertedEventHandler OnCardInserted;
+
+        /// <summary>
+        /// Event handler for the card removal
+        /// </summary>
+        event CardRemovedEventHandler OnCardRemoved;
+
 		/// <summary>
 		/// Wraps the PCSC funciton
 		/// LONG SCardListReaders(SCARDCONTEXT hContext, 
@@ -16,7 +37,7 @@ namespace GemCard
 		///	);
 		/// </summary>
 		/// <returns>A string array of the readers</returns>
-		string[]	ListReaders();
+		string[] ListReaders();
 
 		/// <summary>
 		///  Wraps the PCSC function
@@ -32,7 +53,7 @@ namespace GemCard
 		/// <param name="Reader"></param>
 		/// <param name="ShareMode"></param>
 		/// <param name="PreferredProtocols"></param>
-		void	Connect(string Reader, SHARE ShareMode, PROTOCOL PreferredProtocols);
+		void Connect(string Reader, SHARE ShareMode, PROTOCOL PreferredProtocols);
 
 		/// <summary>
 		/// Wraps the PCSC function
@@ -42,7 +63,7 @@ namespace GemCard
 		///	);
 		/// </summary>
 		/// <param name="Disposition"></param>
-		void	Disconnect(DISCONNECT Disposition);
+		void Disconnect(DISCONNECT Disposition);
 
 		/// <summary>
 		/// Wraps the PCSC function
@@ -58,7 +79,7 @@ namespace GemCard
 		/// </summary>
 		/// <param name="ApduCmd">APDUCommand object with the APDU to send to the card</param>
 		/// <returns>An APDUResponse object with the response from the card</returns>
-		APDUResponse	Transmit(APDUCommand ApduCmd);
+		APDUResponse Transmit(APDUCommand ApduCmd);
 
         /// <summary>
         /// Wraps the PSCS function
