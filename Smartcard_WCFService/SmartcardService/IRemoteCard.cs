@@ -26,7 +26,7 @@ namespace GemCard.Service
         /// Gets the list of readers
         /// </summary>
         /// <returns>A string array of the readers</returns>
-        [OperationContract]
+        [OperationContract(IsOneWay=false)]
         [FaultContract(typeof(SmartcardFault))]
         [FaultContract(typeof(GeneralFault))]
         string[] ListReaders();
@@ -37,7 +37,7 @@ namespace GemCard.Service
         /// <param name="Reader">Reader string</param>
         /// <param name="ShareMode">Session share mode</param>
         /// <param name="PreferredProtocols">Session preferred protocol</param>
-        [OperationContract]
+        [OperationContract(IsOneWay=true)]
         [FaultContract(typeof(SmartcardFault))]
         [FaultContract(typeof(GeneralFault))]        
         void Connect(string Reader, SHARE ShareMode, PROTOCOL PreferredProtocols);
@@ -46,7 +46,7 @@ namespace GemCard.Service
         /// Disconnect the current session
         /// </summary>
         /// <param name="Disposition">Action when disconnecting from the card</param>
-        [OperationContract]
+        [OperationContract(IsOneWay=true)]
         [FaultContract(typeof(SmartcardFault))]
         [FaultContract(typeof(GeneralFault))]
         void Disconnect(DISCONNECT Disposition);
@@ -56,7 +56,7 @@ namespace GemCard.Service
         /// </summary>
         /// <param name="ApduCmd">APDU Command to send to the card</param>
         /// <returns>An APDU Response from the card</returns>
-        [OperationContract]
+        [OperationContract(IsOneWay=false)]
         [FaultContract(typeof(SmartcardFault))]
         [FaultContract(typeof(GeneralFault))]
         APDUResponse Transmit(APDUCommand ApduCmd);
@@ -64,7 +64,7 @@ namespace GemCard.Service
         /// <summary>
         /// Begins a card transaction
         /// </summary>
-        [OperationContract]
+        [OperationContract(IsOneWay=true)]
         [FaultContract(typeof(SmartcardFault))]
         [FaultContract(typeof(GeneralFault))]
         void BeginTransaction();
@@ -72,7 +72,7 @@ namespace GemCard.Service
         /// <summary>
         /// Ends a card transaction
         /// </summary>
-        [OperationContract]
+        [OperationContract(IsOneWay=true)]
         [FaultContract(typeof(SmartcardFault))]
         [FaultContract(typeof(GeneralFault))]
         void EndTransaction(DISCONNECT Disposition);
@@ -84,7 +84,7 @@ namespace GemCard.Service
         /// </summary>
         /// <param name="AttribId">Identifier for the Attribute to get</param>
         /// <returns>Attribute content</returns>
-        [OperationContract]
+        [OperationContract(IsOneWay=false)]
         [FaultContract(typeof(SmartcardFault))]
         [FaultContract(typeof(GeneralFault))]
         byte[] GetAttribute(UInt32 AttribId);

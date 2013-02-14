@@ -16,13 +16,19 @@ using GemCard.Service.Fault;
 
 namespace GemCard.Service
 {
+    public delegate void CallbackDelegate<T>(T t);
+
     /// <summary>
     /// Implements the IRemoteCard interface as WCF service
     /// 
     /// This class uses the CardNative object that implements the ICard interface
     /// </summary>
-    public class RemoteCard : IRemoteCard
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
+    public class RemoteCard : IRemoteCard, IEventControl
     {
+        private CallbackDelegate<string> CardInserted;
+        private CallbackDelegate<string> CardRemoved;
+
         private CardNative card = new CardNative();
 
         #region ICard interface
@@ -165,6 +171,65 @@ namespace GemCard.Service
             {
                 GeneralFault genFault = new GeneralFault(ex);
                 throw new FaultException<GeneralFault>(genFault);
+            }
+        }
+
+        #endregion
+
+        #region IEventControl
+
+        public void SubscribeCardEvents()
+        {
+            ICardEventCallback callback = OperationContext.Current.GetCallbackChannel<ICardEventCallback>();
+            CardInserted += callback.OnCardInserted;
+            CardRemoved += callback.OnCardRemoved;
+            ICommunicationObject obj = (ICommunicationObject)callback;
+            obj.Closed += EventControl_Closed;
+            //obj.Closing += new EventHandler(EventService_Closing);
+        }
+
+        public void UnsubscribeCardEvent()
+        {
+            ICardEventCallback callback = OperationContext.Current.GetCallbackChannel<ICardEventCallback>();
+            CardInserted -= callback.OnCardInserted;
+            CardRemoved -= callback.OnCardRemoved;
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void EventControl_Closed(object sender, EventArgs e)
+        {
+            CardInserted -= ((ICardEventCallback)sender).OnCardInserted;
+            CardRemoved -= ((ICardEventCallback)sender).OnCardRemoved;
+        }
+
+        private void RaiseCardInserted(string reader)
+        {
+            if (CardInserted != null)
+            {
+                try
+                {
+                    CardInserted(reader);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private void RaiseCardRemoved(string reader)
+        {
+            if (CardRemoved != null)
+            {
+                try
+                {
+                    CardRemoved(reader);
+                }
+                catch
+                {
+                }
             }
         }
 
