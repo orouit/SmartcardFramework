@@ -10,10 +10,10 @@ namespace GemCard.Service
 
     [ServiceContract(SessionMode = SessionMode.Required,
         CallbackContract = typeof(ICardEventCallback))]
-    public interface IEventControl
+    public interface ICardEvent
     {
         [OperationContract(IsOneWay = true)]
-        void SubscribeCardEvents();
+        void SubscribeCardEvent(string reader);
 
         [OperationContract(IsOneWay = true)]
         void UnsubscribeCardEvent();    

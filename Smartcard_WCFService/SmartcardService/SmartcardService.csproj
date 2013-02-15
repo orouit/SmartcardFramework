@@ -48,7 +48,7 @@
     <Compile Include="APDUResponse.cs" />
     <Compile Include="GeneralFault.cs" />
     <Compile Include="ICardEventCallback.cs" />
-    <Compile Include="IEventControl.cs" />
+    <Compile Include="ICardEvent.cs" />
     <Compile Include="IRemoteCard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteCard.cs" />

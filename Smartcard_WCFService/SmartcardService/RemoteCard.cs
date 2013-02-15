@@ -24,7 +24,7 @@ namespace GemCard.Service
     /// This class uses the CardNative object that implements the ICard interface
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
-    public class RemoteCard : IRemoteCard, IEventControl
+    public class RemoteCard : IRemoteCard, ICardEvent
     {
         private CallbackDelegate<string> CardInserted;
         private CallbackDelegate<string> CardRemoved;
@@ -178,7 +178,7 @@ namespace GemCard.Service
 
         #region IEventControl
 
-        public void SubscribeCardEvents()
+        public void SubscribeCardEvent(string reader)
         {
             ICardEventCallback callback = OperationContext.Current.GetCallbackChannel<ICardEventCallback>();
             CardInserted += callback.OnCardInserted;

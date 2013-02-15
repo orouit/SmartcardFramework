@@ -88,15 +88,20 @@ namespace GemCard
         /// This method should start a thread that checks for card insertion or removal
         /// </summary>
         /// <param name="Reader"></param>
-        public void StartCardEvents(string Reader)
+        /// <returns>true if the events have been started, false if they are already running</returns>
+        public bool StartCardEvents(string Reader)
         {
+            bool ret = false;
             if (m_thread == null)
             {
                 m_bRunCardDetection = true;
 
                 m_thread = new Thread(new ParameterizedThreadStart(RunCardDetection));
                 m_thread.Start(Reader);
+                ret = true;
             }
+
+            return ret;
         }
 
         /// <summary>
