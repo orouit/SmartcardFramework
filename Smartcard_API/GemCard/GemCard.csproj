@@ -151,6 +151,8 @@
     <Compile Include="ICard.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PCSC.cs" />
+    <Compile Include="Reader.cs" />
     <Compile Include="SmartCardException.cs">
       <SubType>Code</SubType>
     </Compile>

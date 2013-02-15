@@ -1,9 +1,15 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace GemCard 
+namespace Core.Smartcard 
 {
     /// <summary>
     /// Values for AttrId of SCardGetAttrib

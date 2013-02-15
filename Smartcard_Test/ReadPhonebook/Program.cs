@@ -1,9 +1,15 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-using GemCard;
+using Core.Smartcard;
 using GSMHelper;
 using SmartCardPlayer;
 

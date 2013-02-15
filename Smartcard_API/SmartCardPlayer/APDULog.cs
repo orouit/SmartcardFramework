@@ -1,7 +1,14 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
-using GemCard;
+
+using Core.Smartcard;
 
 namespace SmartCardPlayer
 {

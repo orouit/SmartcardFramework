@@ -1,6 +1,12 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 
-namespace GemCard
+namespace Core.Smartcard
 {
 	/// <summary>
 	///  Smart card exceptions

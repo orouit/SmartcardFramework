@@ -1,7 +1,13 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 using System.Text;
 
-namespace GemCard
+namespace Core.Smartcard
 {
 	/// <summary>
 	/// This class represents the APDU response sent by the card

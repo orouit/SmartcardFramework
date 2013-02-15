@@ -1,9 +1,15 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
-namespace GemCard
+namespace Core.Smartcard
 {
     /// <summary>
     /// CARD_STATE enumeration, used by the PC/SC function SCardGetStatusChanged

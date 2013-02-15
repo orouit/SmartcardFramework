@@ -11,7 +11,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 
-using GemCard;
+using Core.Smartcard;
 using GemCard.Service.Fault;
 
 namespace GemCard.Service
@@ -26,9 +26,19 @@ namespace GemCard.Service
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class RemoteCard : IRemoteCard, ICardEvent
     {
+        /// <summary>
+        /// CallBack event for card insertion
+        /// </summary>
         private CallbackDelegate<string> CardInserted;
+
+        /// <summary>
+        /// Callback event for card removal
+        /// </summary>
         private CallbackDelegate<string> CardRemoved;
 
+        /// <summary>
+        /// ICard implementatio object
+        /// </summary>
         private CardNative card = new CardNative();
 
         #region ICard interface
@@ -91,7 +101,7 @@ namespace GemCard.Service
         {
             try
             {
-                GemCard.APDUCommand apduCommand = new GemCard.APDUCommand(
+                Core.Smartcard.APDUCommand apduCommand = new Core.Smartcard.APDUCommand(
                     apduCmd.Class,
                     apduCmd.Ins,
                     apduCmd.P1,
@@ -99,7 +109,7 @@ namespace GemCard.Service
                     (apduCmd.Data == null || apduCmd.Data.Length == 0) ? null : apduCmd.Data,
                     apduCmd.Le);
 
-                GemCard.APDUResponse apduResponse = card.Transmit(apduCommand);
+                Core.Smartcard.APDUResponse apduResponse = card.Transmit(apduCommand);
 
                 return new APDUResponse()
                 {

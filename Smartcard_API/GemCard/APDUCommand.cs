@@ -1,7 +1,13 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 using System.Text;
 
-namespace GemCard
+namespace Core.Smartcard
 {
 	/// <summary>
 	/// This class represents a command APDU
@@ -39,7 +45,6 @@ namespace GemCard
 			m_bLe = bLe;
 		}
 
-
 		/// <summary>
 		/// Update the current APDU with selected parameters
 		/// </summary>
@@ -74,7 +79,6 @@ namespace GemCard
 			}
 		}
 
-
 		/// <summary>
 		/// Instruction get property
 		/// </summary>
@@ -85,7 +89,6 @@ namespace GemCard
 				return m_bIns;
 			}
 		}
-
 
 		/// <summary>
 		/// Parameter P1 get property
@@ -98,7 +101,6 @@ namespace GemCard
 			}
 		}
 
-
 		/// <summary>
 		/// Parameter P2 get property
 		/// </summary>
@@ -109,7 +111,6 @@ namespace GemCard
 				return m_bP2;
 			}
 		}
-
 
 		/// <summary>
 		/// Data get property
@@ -122,7 +123,6 @@ namespace GemCard
 			}
 		}
 
-
 		/// <summary>
 		/// Length expected get property
 		/// </summary>
@@ -133,6 +133,7 @@ namespace GemCard
 				return m_bLe;
 			}
         }
+
         #endregion
 
         /// <summary>

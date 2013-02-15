@@ -1,8 +1,14 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GemCard
+namespace Core.Smartcard
 {
     /// <summary>
     /// This class is used to update a set of parameters of an APDUCommand object

@@ -10,6 +10,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
+using Core.Smartcard;
+
 namespace GemCard.Service.Fault
 {
     [DataContract]

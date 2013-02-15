@@ -1,8 +1,14 @@
+/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-using GemCard;
+using Core.Smartcard;
 
 namespace DemoSCFmwk
 {
@@ -99,7 +105,6 @@ namespace DemoSCFmwk
                 }
 
                 iCard.Disconnect(DISCONNECT.Unpower);
-
             }
             catch (Exception ex)
             {

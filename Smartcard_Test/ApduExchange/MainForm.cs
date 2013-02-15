@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
+using Core.Smartcard;
 using GemCard;
 using SmartCardPlayer;
 
