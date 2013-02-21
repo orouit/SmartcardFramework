@@ -37,7 +37,7 @@ namespace GemCard.Service
         private CallbackDelegate<string> CardRemoved;
 
         /// <summary>
-        /// ICard implementatio object
+        /// ICard implementation object
         /// </summary>
         private CardNative card = new CardNative();
 
