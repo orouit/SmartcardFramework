@@ -14,11 +14,22 @@ namespace Core.Smartcard
 {
     public class Reader : IDisposable
     {
-        private string readerName;
+        #region Constants
+
         private const uint INFINITE = 0xFFFFFFFF;
         private const uint WAIT_TIME = 250;
+
+        #endregion
+
+        #region Fields
+
+        private string readerName;
         private bool runCardDetectionFlag = true;
         private Thread cardDetectThread = null;
+
+        #endregion
+
+        #region Events
 
         /// <summary>
         /// Event handler for the card insertion
@@ -30,10 +41,91 @@ namespace Core.Smartcard
         /// </summary>
         public event CardRemovedEventHandler CardRemoved = null;
 
+        #endregion
+
+        #region Constructors
+
         public Reader(string readerName)
         {
             this.readerName = readerName;
         }
+
+        /// <summary>
+        /// Finalizer to make sure that the card events are stopped
+        /// </summary>
+        ~Reader()
+        {
+            StopCardEvents();
+        }
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// This method should start a thread that checks for card insertion or removal
+        /// </summary>
+        /// <param name="Reader"></param>
+        /// <returns>true if the events have been started, false if they are already running</returns>
+        public bool StartCardEvents(string Reader)
+        {
+            bool ret = false;
+            if (cardDetectThread == null)
+            {
+                runCardDetectionFlag = true;
+
+                cardDetectThread = new Thread(new ParameterizedThreadStart(RunCardDetection));
+                cardDetectThread.Start(Reader);
+                ret = true;
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Stops the card events thread
+        /// </summary>
+        public void StopCardEvents()
+        {
+            if (cardDetectThread != null)
+            {
+                int
+                    nTimeOut = 10,
+                    nCount = 0;
+                bool m_bStop = false;
+                runCardDetectionFlag = false;
+
+                do
+                {
+                    if (nCount > nTimeOut)
+                    {
+                        cardDetectThread.Abort();
+                        break;
+                    }
+
+                    if (cardDetectThread.ThreadState == ThreadState.Aborted)
+                        m_bStop = true;
+
+                    if (cardDetectThread.ThreadState == ThreadState.Stopped)
+                        m_bStop = true;
+
+                    Thread.Sleep(200);
+                    ++nCount;           // Manage time out
+                }
+                while (!m_bStop);
+
+                cardDetectThread = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            StopCardEvents();
+        }
+
+        #endregion
+
+        #region Private methods
 
         /// <summary>
         /// This function must implement a card detection mechanism.
@@ -42,7 +134,7 @@ namespace Core.Smartcard
         /// When card removal is detected, it must call the method CardRemoved()
         /// 
         /// </summary>
-        protected void RunCardDetection(object Reader)
+        private void RunCardDetection(object Reader)
         {
             bool bFirstLoop = true;
             IntPtr hContext = IntPtr.Zero;    // Local context
@@ -134,10 +226,7 @@ namespace Core.Smartcard
             }
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
         #region Static methods
 
