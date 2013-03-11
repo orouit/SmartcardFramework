@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 
 using Core.Smartcard;
-using GSMHelper;
+using Core.GSMHelper;
 using SmartCardPlayer;
 
 namespace TestSmartcard

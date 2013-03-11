@@ -12,6 +12,12 @@ using System.Threading;
 
 namespace Core.Smartcard
 {
+    public delegate void CardInsertedExEventHandler(object sender, CardInsertedArgs args);
+    public delegate void CardRemovedExEventHandler(object sender, CardRemovedArgs args);
+
+    /// <summary>
+    /// This class represents a smart card reader. It is using native PC/SC API
+    /// </summary>
     public class Reader : IDisposable
     {
         #region Constants
@@ -26,6 +32,7 @@ namespace Core.Smartcard
         private string readerName;
         private bool runCardDetectionFlag = true;
         private Thread cardDetectThread = null;
+        private ICard card = null;
 
         #endregion
 
@@ -34,12 +41,12 @@ namespace Core.Smartcard
         /// <summary>
         /// Event handler for the card insertion
         /// </summary>
-        public event CardInsertedEventHandler CardInserted = null;
+        public event CardInsertedExEventHandler CardInserted = null;
 
         /// <summary>
         /// Event handler for the card removal
         /// </summary>
-        public event CardRemovedEventHandler CardRemoved = null;
+        public event CardRemovedExEventHandler CardRemoved = null;
 
         #endregion
 
@@ -67,7 +74,7 @@ namespace Core.Smartcard
         /// </summary>
         /// <param name="Reader"></param>
         /// <returns>true if the events have been started, false if they are already running</returns>
-        public bool StartCardEvents(string Reader)
+        public bool StartCardEvents()
         {
             bool ret = false;
             if (cardDetectThread == null)
@@ -75,7 +82,7 @@ namespace Core.Smartcard
                 runCardDetectionFlag = true;
 
                 cardDetectThread = new Thread(new ParameterizedThreadStart(RunCardDetection));
-                cardDetectThread.Start(Reader);
+                cardDetectThread.Start(readerName);
                 ret = true;
             }
 
@@ -210,19 +217,37 @@ namespace Core.Smartcard
             PCSC.SCardReleaseContext(hContext);
         }
 
+        /// <summary>
+        /// Called when the card is removed
+        /// </summary>
+        /// <param name="reader"></param>
         private void RaiseCardRemoved(string reader)
         {
             if (CardRemoved != null)
             {
-                CardRemoved(this, reader);
+                card = null;
+                CardRemoved(this, new CardRemovedArgs(reader));
             }
         }
 
+        /// <summary>
+        /// Called when the card is inserted.
+        /// 
+        /// WARNING: This method is not safe if multiple event handler are plugged to the 
+        /// event. The same reference would be used by different threads and that could be
+        /// unsafe.
+        /// 
+        /// A solution is to limit the number of event handle to one by overloading the
+        /// event += and -=
+        /// </summary>
+        /// <param name="reader"></param>
         private void RaiseCardInserted(string reader)
         {
             if (CardInserted != null)
             {
-                CardInserted(this, reader);
+                card = new CardNative();
+                card.Connect(reader, SHARE.Shared, PROTOCOL.T0orT1);
+                CardInserted(this, new CardInsertedArgs(reader, card));
             }
         }
 
@@ -278,6 +303,8 @@ namespace Core.Smartcard
         }
 
         /// <summary>
+        /// This static methods gets the list of readers currently connected to the PC
+        /// 
         /// Wraps the PCSC function
         /// LONG SCardListReaders(SCARDCONTEXT hContext, 
         ///		LPCTSTR mszGroups, 
