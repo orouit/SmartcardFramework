@@ -18,7 +18,7 @@ namespace Core.Smartcard
         /// <summary>
         /// CARD_STATE enumeration, used by the PC/SC function SCardGetStatusChanged
         /// </summary>
-        enum CARD_STATE
+        public enum CARD_STATE
         {
             UNAWARE = 0x00000000,
             IGNORE = 0x00000001,

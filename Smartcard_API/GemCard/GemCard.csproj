@@ -152,10 +152,12 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CardBase.cs" />
+    <Compile Include="CardBaseEx.cs" />
     <Compile Include="CardEventArgs.cs" />
     <Compile Include="CardNative.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CardNativeEx.cs" />
     <Compile Include="ICard.cs">
       <SubType>Code</SubType>
     </Compile>

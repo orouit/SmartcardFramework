@@ -5,10 +5,9 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Core.Smartcard
 {
@@ -17,6 +16,8 @@ namespace Core.Smartcard
 
     /// <summary>
     /// This class represents a smart card reader. It is using native PC/SC API
+    /// 
+    /// If USE_THREAD is defined, the card events detection is using Thread, otherwise it is using Task
     /// </summary>
     public class Reader : IDisposable
     {
@@ -31,7 +32,13 @@ namespace Core.Smartcard
 
         private string readerName;
         private bool runCardDetectionFlag = true;
+#if USE_THREAD
         private Thread cardDetectThread = null;
+#else
+        protected Task cardDetectTask = null;
+        protected CancellationToken cancellationToken;
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+#endif
         private ICard card = null;
 
         #endregion
@@ -77,6 +84,7 @@ namespace Core.Smartcard
         public bool StartCardEvents()
         {
             bool ret = false;
+#if USE_THREAD
             if (cardDetectThread == null)
             {
                 runCardDetectionFlag = true;
@@ -85,7 +93,14 @@ namespace Core.Smartcard
                 cardDetectThread.Start(readerName);
                 ret = true;
             }
-
+#else
+            if (cardDetectTask == null)
+            {
+                cancellationToken = cancellationTokenSource.Token;
+                cardDetectTask = Task.Factory.StartNew(() => RunCardDetectionEx(readerName), cancellationToken);
+                ret = true;
+            }
+#endif
             return ret;
         }
 
@@ -94,6 +109,7 @@ namespace Core.Smartcard
         /// </summary>
         public void StopCardEvents()
         {
+#if USE_THREAD
             if (cardDetectThread != null)
             {
                 int
@@ -123,6 +139,36 @@ namespace Core.Smartcard
 
                 cardDetectThread = null;
             }
+#else
+            if (cardDetectTask != null)
+            {
+                bool stopped = false;
+
+                if (cardDetectTask.Status == TaskStatus.Running)
+                {
+                    cancellationTokenSource.Cancel();
+
+                    do
+                    {
+                        Thread.SpinWait(20000);
+
+                        if (cardDetectTask.Status == TaskStatus.Canceled)
+                        {
+                            stopped = true;
+                        }
+
+                        if (cardDetectTask.Status == TaskStatus.RanToCompletion)
+                        {
+                            stopped = true;
+                        }
+                    }
+                    while (!stopped);
+
+                    cardDetectTask.Dispose();
+                    cardDetectTask = null;
+                }
+            }
+#endif
         }
 
         public void Dispose()
@@ -157,7 +203,7 @@ namespace Core.Smartcard
                 UInt32 nbReaders = 1;
                 PCSC.SCard_ReaderState[] readerState = new PCSC.SCard_ReaderState[nbReaders];
 
-                readerState[0].m_dwCurrentState = (UInt32)CARD_STATE.UNAWARE;
+                readerState[0].m_dwCurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
                 readerState[0].m_szReader = (string)Reader;
 
                 UInt32 eventState;
@@ -172,23 +218,23 @@ namespace Core.Smartcard
                         currentState = readerState[0].m_dwCurrentState;
 
                         // Check state
-                        if (((eventState & (uint)CARD_STATE.CHANGED) == (uint)CARD_STATE.CHANGED) && !bFirstLoop)
+                        if (((eventState & (uint)PCSC.CARD_STATE.CHANGED) == (uint)PCSC.CARD_STATE.CHANGED) && !bFirstLoop)
                         {
                             // State has changed
-                            if ((eventState & (uint)CARD_STATE.EMPTY) == (uint)CARD_STATE.EMPTY)
+                            if ((eventState & (uint)PCSC.CARD_STATE.EMPTY) == (uint)PCSC.CARD_STATE.EMPTY)
                             {
                                 // There is no card, card has been removed -> Fire CardRemoved event
                                 RaiseCardRemoved((string)Reader);
                             }
 
-                            if (((eventState & (uint)CARD_STATE.PRESENT) == (uint)CARD_STATE.PRESENT) &&
-                                ((eventState & (uint)CARD_STATE.PRESENT) != (currentState & (uint)CARD_STATE.PRESENT)))
+                            if (((eventState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT) &&
+                                ((eventState & (uint)PCSC.CARD_STATE.PRESENT) != (currentState & (uint)PCSC.CARD_STATE.PRESENT)))
                             {
                                 // There is a card in the reader -> Fire CardInserted event
                                 RaiseCardInserted((string)Reader);
                             }
 
-                            if ((eventState & (uint)CARD_STATE.ATRMATCH) == (uint)CARD_STATE.ATRMATCH)
+                            if ((eventState & (uint)PCSC.CARD_STATE.ATRMATCH) == (uint)PCSC.CARD_STATE.ATRMATCH)
                             {
                                 // There is a card in the reader and it matches the ATR we were expecting-> Fire CardInserted event
                                 RaiseCardInserted((string)Reader);
@@ -215,6 +261,91 @@ namespace Core.Smartcard
             }
 
             PCSC.SCardReleaseContext(hContext);
+        }
+
+        /// <summary>
+        /// This function must implement a card detection mechanism.
+        /// 
+        /// When card insertion is detected, it must call the method CardInserted()
+        /// When card removal is detected, it must call the method CardRemoved()
+        /// 
+        /// </summary>
+        private void RunCardDetectionEx(string Reader)
+        {
+            bool bFirstLoop = true;
+            IntPtr hContext = IntPtr.Zero;    // Local context
+            IntPtr phContext;
+
+            phContext = Marshal.AllocHGlobal(Marshal.SizeOf(hContext));
+
+            if (PCSC.SCardEstablishContext((uint)SCOPE.User, IntPtr.Zero, IntPtr.Zero, phContext) == 0)
+            {
+                hContext = Marshal.ReadIntPtr(phContext);
+
+                UInt32 nbReaders = 1;
+                PCSC.SCard_ReaderState[] readerState = new PCSC.SCard_ReaderState[nbReaders];
+
+                readerState[0].m_dwCurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
+                readerState[0].m_szReader = (string)Reader;
+
+                UInt32 eventState;
+                UInt32 currentState = readerState[0].m_dwCurrentState;
+
+                // Card detection loop
+                do
+                {
+                    if (PCSC.SCardGetStatusChange(hContext, WAIT_TIME, readerState, nbReaders) == 0)
+                    {
+                        eventState = readerState[0].m_dwEventState;
+                        currentState = readerState[0].m_dwCurrentState;
+
+                        // Check state
+                        if (((eventState & (uint)PCSC.CARD_STATE.CHANGED) == (uint)PCSC.CARD_STATE.CHANGED) && !bFirstLoop)
+                        {
+                            // State has changed
+                            if ((eventState & (uint)PCSC.CARD_STATE.EMPTY) == (uint)PCSC.CARD_STATE.EMPTY)
+                            {
+                                // There is no card, card has been removed -> Fire CardRemoved event
+                                RaiseCardRemoved((string)Reader);
+                            }
+
+                            if (((eventState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT) &&
+                                ((eventState & (uint)PCSC.CARD_STATE.PRESENT) != (currentState & (uint)PCSC.CARD_STATE.PRESENT)))
+                            {
+                                // There is a card in the reader -> Fire CardInserted event
+                                RaiseCardInserted((string)Reader);
+                            }
+
+                            if ((eventState & (uint)PCSC.CARD_STATE.ATRMATCH) == (uint)PCSC.CARD_STATE.ATRMATCH)
+                            {
+                                // There is a card in the reader and it matches the ATR we were expecting-> Fire CardInserted event
+                                RaiseCardInserted((string)Reader);
+                            }
+                        }
+
+                        // The current stateis now the event state
+                        readerState[0].m_dwCurrentState = eventState;
+
+                        bFirstLoop = false;
+                    }
+
+                    Thread.SpinWait(50000);
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
+                }
+                while (true);    // Exit on request
+                Marshal.FreeHGlobal(phContext);
+            }
+            else
+            {
+                Marshal.FreeHGlobal(phContext);
+                throw new Exception("PC/SC error");
+            }
+
+            PCSC.SCardReleaseContext(hContext);
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         /// <summary>

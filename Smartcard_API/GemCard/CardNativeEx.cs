@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @author Olivier ROUIT
  * 
  * @license CPL, CodeProject license 
@@ -10,11 +10,8 @@ using System.Threading;
 
 namespace Core.Smartcard
 {
-	/// <summary>
-	/// Implementation of ICard using native (P/Invoke) interoperability for PC/SC
-	/// </summary>
-	public class CardNative : CardBase, IDisposable
-	{
+    class CardNativeEx : CardBaseEx, IDisposable
+    {
         private IntPtr m_hContext = IntPtr.Zero;
         private IntPtr m_hCard = IntPtr.Zero;
 		private	UInt32	m_nProtocol = (uint) PROTOCOL.T0;
@@ -24,16 +21,17 @@ namespace Core.Smartcard
 		/// <summary>
 		/// Default constructor
 		/// </summary>
-		public CardNative()
+		public CardNativeEx()
 		{
 		}
 
 		/// <summary>
 		/// Object destruction
 		/// </summary>
-		~CardNative()
+		~CardNativeEx()
 		{
 			Disconnect(DISCONNECT.Unpower);
+
 			ReleaseContext();
 		}
 
@@ -128,7 +126,7 @@ namespace Core.Smartcard
 		{
 			IntPtr hContext = Marshal.AllocHGlobal(Marshal.SizeOf(m_hContext));
 
-            m_nLastError = PCSC.SCardEstablishContext((uint)Scope, IntPtr.Zero, IntPtr.Zero, hContext);
+			m_nLastError = PCSC.SCardEstablishContext((uint) Scope, IntPtr.Zero, IntPtr.Zero, hContext);
 			if (m_nLastError != 0)
 			{
 				Marshal.FreeHGlobal(hContext);
@@ -148,9 +146,9 @@ namespace Core.Smartcard
 		/// </summary>
 		public void ReleaseContext()
 		{
-            if (PCSC.SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
+			if (PCSC.SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
 			{
-                m_nLastError = PCSC.SCardReleaseContext(m_hContext);
+				m_nLastError = PCSC.SCardReleaseContext(m_hContext);
                 ThrowSmartcardException("SCardReleaseContext", m_nLastError);
 
                 m_hContext = IntPtr.Zero;
@@ -178,7 +176,7 @@ namespace Core.Smartcard
 			IntPtr	hCard = Marshal.AllocHGlobal(Marshal.SizeOf(m_hCard));
 			IntPtr	pProtocol = Marshal.AllocHGlobal(Marshal.SizeOf(m_nProtocol));
 
-            m_nLastError = PCSC.SCardConnect(m_hContext, 
+			m_nLastError = PCSC.SCardConnect(m_hContext, 
 				Reader, 
 				(uint) ShareMode, 
 				(uint) PreferredProtocols, 
@@ -211,7 +209,7 @@ namespace Core.Smartcard
 		{
             if (PCSC.SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
 			{
-                m_nLastError = PCSC.SCardDisconnect(m_hCard, (uint)Disposition);
+				m_nLastError = PCSC.SCardDisconnect(m_hCard, (uint) Disposition);
                 m_hCard = IntPtr.Zero;
 
                 try
@@ -343,7 +341,7 @@ namespace Core.Smartcard
         /// When card removal is detected, it must call the method CardRemoved()
         /// 
         /// </summary>
-        protected override void RunCardDetection(object Reader)
+        protected override void RunCardDetection(string Reader)
         {
             bool bFirstLoop = true;
             IntPtr hContext = IntPtr.Zero;    // Local context
@@ -351,7 +349,7 @@ namespace Core.Smartcard
 
             phContext = Marshal.AllocHGlobal(Marshal.SizeOf(hContext));
 
-            if (PCSC.SCardEstablishContext((uint)SCOPE.User, IntPtr.Zero, IntPtr.Zero, phContext) == 0)
+            if (PCSC.SCardEstablishContext((uint) SCOPE.User, IntPtr.Zero, IntPtr.Zero, phContext) == 0)
             {
                 hContext = Marshal.ReadIntPtr(phContext);
                 Marshal.FreeHGlobal(phContext);
@@ -404,10 +402,12 @@ namespace Core.Smartcard
                         bFirstLoop = false;
                     }
 
-                    Thread.Sleep(100);
+                    Thread.SpinWait(50000);
 
-                    if (m_bRunCardDetection == false)
+                    if (cancellationToken.IsCancellationRequested)
+                    {
                         break;
+                    }
                 }
                 while (true);    // Exit on request
             }
@@ -418,12 +418,14 @@ namespace Core.Smartcard
             }
 
             PCSC.SCardReleaseContext(hContext);
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
-        public override void Dispose()
+        protected override void Disposing()
         {
-            Disconnect(DISCONNECT.Unpower);
+            base.Disposing();
 
+            Disconnect(DISCONNECT.Unpower);
             ReleaseContext();
         }
 

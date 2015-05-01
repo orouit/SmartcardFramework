@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/**
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
+ */
 
 using Core.Smartcard;
+using System;
 
 namespace ReaderTestApp
 {
@@ -32,6 +34,7 @@ namespace ReaderTestApp
 
                     reader.StopCardEvents();
                     reader.Dispose();
+                    Console.WriteLine("Card detection terminated");
                 }
             }
             catch (Exception ex)

@@ -170,7 +170,7 @@ namespace Core.Smartcard
         }
         #endregion
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             StopCardEvents();
         }
