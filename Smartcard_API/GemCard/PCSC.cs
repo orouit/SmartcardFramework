@@ -41,10 +41,9 @@ namespace Core.Smartcard
         [StructLayout(LayoutKind.Sequential)]
         public struct SCard_IO_Request
         {
-            public UInt32 m_dwProtocol;
-            public UInt32 m_cbPciLength;
+            public UInt32 Protocol;
+            public UInt32 PciLength;
         }
-
 
         /// <summary>
         /// Wraps theSCARD_READERSTATE structure of PC/SC
@@ -52,15 +51,14 @@ namespace Core.Smartcard
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct SCard_ReaderState
         {
-            public string m_szReader;
-            public IntPtr m_pvUserData;
-            public UInt32 m_dwCurrentState;
-            public UInt32 m_dwEventState;
-            public UInt32 m_cbAtr;
+            public string Reader;
+            public IntPtr UserData;
+            public UInt32 CurrentState;
+            public UInt32 EventState;
+            public UInt32 Atr;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            public byte[] m_rgbAtr;
+            public byte[] AtrBytes;
         }
-
 
         /// <summary>
         /// Native SCardGetStatusChanged from winscard.dll

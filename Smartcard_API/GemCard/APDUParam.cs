@@ -16,21 +16,22 @@ namespace Core.Smartcard
     public class APDUParam
     {
         byte
-            m_bClass = 0,
-            m_bChannel = 0,
-            m_bP2 = 0,
-            m_bP1 = 0;
-        byte[] m_baData = null;
-        short m_nLe = -1;
+            bClass = 0,
+            bChannel = 0,
+            bP2 = 0,
+            bP1 = 0;
+        byte[] baData = null;
+        short nLe = -1;
         bool 
-            m_fUseP1 = false,
-            m_fUseP2 = false,
-            m_fChannel = false,
-            m_fData = false,
-            m_fClass = false,
-            m_fLe = false;
+            useP1 = false,
+            useP2 = false,
+            useChannel = false,
+            useData = false,
+            useClass = false,
+            useLe = false;
 
         #region Constructors
+
         public APDUParam()
         {
         }
@@ -38,25 +39,28 @@ namespace Core.Smartcard
         /// <summary>
         /// Copy constructor (used for cloning)
         /// </summary>
-        /// <param name="param"></param>
-        public APDUParam(APDUParam param)
+        /// <param name="other"></param>
+        public APDUParam(APDUParam other)
         {
             // Copy field
-            if (param.m_baData != null)
-                param.m_baData.CopyTo(m_baData, 0);
-            m_bClass = param.m_bClass;
-            m_bChannel = param.m_bChannel;
-            m_bP1 = param.m_bP1;
-            m_bP2 = param.m_bP2;
-            m_nLe = param.m_nLe;
+            if (other.baData != null)
+            {
+                baData = new byte[other.baData.Length];
+                other.baData.CopyTo(baData, 0);
+            }
+            bClass = other.bClass;
+            bChannel = other.bChannel;
+            bP1 = other.bP1;
+            bP2 = other.bP2;
+            nLe = other.nLe;
 
             // Copy flags field
-            m_fChannel = param.m_fChannel;
-            m_fClass = param.m_fClass;
-            m_fData = param.m_fData;
-            m_fLe = param.m_fLe;
-            m_fUseP1 = param.m_fUseP1;
-            m_fUseP2 = param.m_fUseP2;
+            useChannel = other.useChannel;
+            useClass = other.useClass;
+            useData = other.useData;
+            useLe = other.useLe;
+            useP1 = other.useP1;
+            useP2 = other.useP2;
         }
 
         public APDUParam(byte bClass, byte bP1, byte bP2, byte[] baData, short nLe)
@@ -67,6 +71,7 @@ namespace Core.Smartcard
             this.Data = baData;
             this.Le = (byte)nLe;
         }
+
         #endregion
 
         /// <summary>
@@ -83,114 +88,117 @@ namespace Core.Smartcard
         /// </summary>
         public void Reset()
         {
-            m_bClass = 0;
-            m_bChannel = 0;
-            m_bP2 = 0;
-            m_bP1 = 0;
+            bClass = 0;
+            bChannel = 0;
+            bP2 = 0;
+            bP1 = 0;
 
-            m_baData = null;
-            m_nLe = -1;
+            baData = null;
+            nLe = -1;
 
-            m_fUseP1 = false;
-            m_fUseP2 = false;
-            m_fChannel = false;
-            m_fData = false;
-            m_fClass = false;
-            m_fLe = false;
+            useP1 = false;
+            useP2 = false;
+            useChannel = false;
+            useData = false;
+            useClass = false;
+            useLe = false;
         }
 
         #region Flags properties
+
         public bool UseClass
         {
-            get { return m_fClass; }
+            get { return useClass; }
         }
 
         public bool UseChannel
         {
-            get { return m_fChannel; }
+            get { return useChannel; }
         }
 
         public bool UseLe
         {
-            get { return m_fLe; }
+            get { return useLe; }
         }
 
         public bool UseData
         {
-            get { return m_fData; }
+            get { return useData; }
         }
 
         public bool UseP1
         {
-            get { return m_fUseP1; }
+            get { return useP1; }
         }
 
         public bool UseP2
         {
-            get { return m_fUseP2; }
+            get { return useP2; }
         }
+
         #endregion
 
         #region Parameter properties
+
         public byte P1
         {
-            get { return m_bP1; }
+            get { return bP1; }
 
             set
             {
-                m_bP1 = value;
-                m_fUseP1 = true;
+                bP1 = value;
+                useP1 = true;
             }
         }
 
         public byte P2
         {
-            get { return m_bP2; }
+            get { return bP2; }
             set
             {
-                m_bP2 = value;
-                m_fUseP2 = true;
+                bP2 = value;
+                useP2 = true;
             }
 
         }
 
         public byte[] Data
         {
-            get { return m_baData; }
+            get { return baData; }
             set
             {
-                m_baData = value;
-                m_fData = true;
+                baData = value;
+                useData = true;
             }
         }
 
         public byte Le
         {
-            get { return (byte)m_nLe; }
+            get { return (byte)nLe; }
             set
             {
-                m_nLe = value;
-                m_fLe = true;
+                nLe = value;
+                useLe = true;
             }
         }
 
         public byte Channel
         {
-            get { return m_bChannel; }
+            get { return bChannel; }
             set
             {
-                m_bChannel = value;
-                m_fChannel = true;
+                bChannel = value;
+                useChannel = true;
             }
         }
 
         public byte Class
         {
-            get { return m_bClass; }
+            get { return bClass; }
             set
             {
-                m_bClass = value;
-                m_fClass = true;
+                bClass = value;
+                useClass = true;
             }
         }
 

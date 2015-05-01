@@ -4,12 +4,12 @@
  * @license CPL, CodeProject license 
  */
 
-using System;
+using Core.Smartcard;
+using Core.Utility;
+
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
-
-using Core.Smartcard;
 
 namespace SmartCardPlayer
 {
@@ -18,7 +18,6 @@ namespace SmartCardPlayer
     /// </summary>
     public class SequenceParameter : Dictionary<string, string> {
     }
-
 
 	/// <summary>
 	/// This class provides a set of functions to process APDU commands described in
@@ -104,7 +103,6 @@ namespace SmartCardPlayer
             }
         }
 
-
         /// <summary>
         /// Constructs an APDU player
         /// </summary>
@@ -113,7 +111,6 @@ namespace SmartCardPlayer
         {
             m_iCard = iCard;
         }
-
 
         /// <summary>
         /// Constructs an APDU player
@@ -128,7 +125,6 @@ namespace SmartCardPlayer
 
             m_iCard = iCard;
         }
-
 
         /// <summary>
         /// Loads a Sequence file
@@ -152,7 +148,6 @@ namespace SmartCardPlayer
             }
         }
 
-
         /// <summary>
         /// Loads an APDU file
         /// </summary>
@@ -174,7 +169,6 @@ namespace SmartCardPlayer
                 throw new ApduCommandException(ApduCommandException.NotValidDocument);
             }
         }
-
 
 		/// <summary>
 		/// APDUNames property, gets a list of the APDU Names
@@ -201,7 +195,6 @@ namespace SmartCardPlayer
 			}
 		}
 
-
         /// <summary>
         /// Process a simple APDU command, Parameters can be provided in the APDUParam object
         /// </summary>
@@ -222,6 +215,15 @@ namespace SmartCardPlayer
 			return ExecuteApduCommand(apduCmd);
 		}
 
+        public APDUResponse ProcessCommand(string cmdClass, string cmdIns, APDUParam apduParam)
+        {
+			byte bClass = byte.Parse(cmdClass, NumberStyles.AllowHexSpecifier);
+			byte bIns = byte.Parse(cmdIns, NumberStyles.AllowHexSpecifier);
+            APDUCommand apduCommand = new APDUCommand(bClass, bIns, 0, 0, null , 0);
+            apduCommand.Update(apduParam);
+
+            return ExecuteApduCommand(apduCommand);
+        }
 
 		/// <summary>
 		/// Process a simple APDU command, all parameters are included in the 
@@ -240,7 +242,6 @@ namespace SmartCardPlayer
 			return ExecuteApduCommand(apduCmd);
 		}
 
-
         /// <summary>
         /// Process an APDU sequence and execute each of its commands in the sequence order
         /// </summary>
@@ -250,7 +251,6 @@ namespace SmartCardPlayer
         {
             return ProcessSequence(apduSequenceName, null);
         }
-
 
         /// <summary>
         /// Process an APDU sequence and execute each of its commands in the sequence order
@@ -282,7 +282,6 @@ namespace SmartCardPlayer
             return apduResp;
         }
 
-
         /// <summary>
         /// Gets an APDU command by name
         /// </summary>
@@ -311,7 +310,6 @@ namespace SmartCardPlayer
         }
 
         #region Private methods
-
 
 		/// <summary>
 		/// Builds an APDUCommand object from an XmlNode representing the command.
@@ -462,7 +460,6 @@ namespace SmartCardPlayer
             return new APDUCommand(bClass, bIns, bP1, bP2, baData, bLe);
         }
 
-
         /// <summary>
         /// Executes an APDU command
         /// </summary>
@@ -515,7 +512,6 @@ namespace SmartCardPlayer
             return m_apduResp;
         }
 
-
         /// <summary>
         /// Gets the XML node for a Sequence of APDUs
         /// </summary>
@@ -541,7 +537,6 @@ namespace SmartCardPlayer
 
             return apduSeq;
         }
-
 
         /// <summary>
         /// Process the parameters of a Sequence. If a parameter of the same name is found in the list of parameters
@@ -583,18 +578,15 @@ namespace SmartCardPlayer
             return l_seqParam;
         }
 
-
         /// <summary>
         /// Builds an APDUParam object from the parameters of a command and a set of parameter for a sequence
         /// </summary>
         /// <param name="xmlAttrs">List of parameters of the APDU</param>
         /// <param name="seqParam">List of parameters of the sequence</param>
         /// <returns>APDUParam object</returns>
-//        private APDUParam BuildCommandParam(XmlAttributeCollection xmlAttrs, Dictionary<string, string> seqParam)
         private APDUParam BuildCommandParam(XmlAttributeCollection xmlAttrs, SequenceParameter seqParam)
         {
             APDUParam apduParam = null;
-            byte[] baData = null;
             string sVal = null;
 
             apduParam = new APDUParam();
@@ -650,15 +642,7 @@ namespace SmartCardPlayer
                         }
                         finally
                         {
-                            int nLen = sVal.Length / 2;
-                            if (nLen != 0)
-                            {
-                                baData = new byte[nLen];
-                                for (int nJ = 0; nJ < nLen; nJ++)
-                                    baData[nJ] = byte.Parse(sVal.Substring(nJ * 2, 2), NumberStyles.AllowHexSpecifier);
-
-                                apduParam.Data = baData;
-                            }
+                            apduParam.Data = ByteArray.Parse(sVal);
                         }
                         break;
                     }
@@ -667,7 +651,6 @@ namespace SmartCardPlayer
 
             return apduParam;
         }
-
 
         /// <summary>
         /// Process a command of a sequence of APDU

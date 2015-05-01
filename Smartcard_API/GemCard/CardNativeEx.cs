@@ -243,8 +243,8 @@ namespace Core.Smartcard
 			byte[]	ApduBuffer = null;
 			byte[]	ApduResponse = new byte[ApduCmd.Le + APDUResponse.SW_LENGTH];
 			PCSC.SCard_IO_Request	ioRequest = new PCSC.SCard_IO_Request();
-			ioRequest.m_dwProtocol = m_nProtocol;
-			ioRequest.m_cbPciLength = 8;
+			ioRequest.Protocol = m_nProtocol;
+			ioRequest.PciLength = 8;
 
 			// Build the command APDU
 			if (ApduCmd.Data == null)
@@ -341,7 +341,7 @@ namespace Core.Smartcard
         /// When card removal is detected, it must call the method CardRemoved()
         /// 
         /// </summary>
-        protected override void RunCardDetection(string Reader)
+        protected override void RunCardDetection(string reader)
         {
             bool bFirstLoop = true;
             IntPtr hContext = IntPtr.Zero;    // Local context
@@ -357,11 +357,11 @@ namespace Core.Smartcard
                 UInt32 nbReaders = 1;
                 PCSC.SCard_ReaderState[] readerState = new PCSC.SCard_ReaderState[nbReaders];
 
-                readerState[0].m_dwCurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
-                readerState[0].m_szReader = (string)Reader;
+                readerState[0].CurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
+                readerState[0].Reader = reader;
 
                 UInt32 eventState;
-                UInt32 currentState = readerState[0].m_dwCurrentState;
+                UInt32 currentState = readerState[0].CurrentState;
 
                 // Card detection loop
                 do
@@ -369,35 +369,42 @@ namespace Core.Smartcard
                     if (PCSC.SCardGetStatusChange(hContext, WAIT_TIME
                         , readerState, nbReaders) == 0)
                     {
-                        eventState = readerState[0].m_dwEventState;
-                        currentState = readerState[0].m_dwCurrentState;
+                        eventState = readerState[0].EventState;
+                        currentState = readerState[0].CurrentState;
 
-                        // Check state
-                        if (((eventState & (uint)PCSC.CARD_STATE.CHANGED) == (uint)PCSC.CARD_STATE.CHANGED) && !bFirstLoop)    
+                        if (bFirstLoop)
+                        {
+                            // Check if a card is already inserted
+                            if ((eventState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT)
+                            {
+                                CardInserted(reader);
+                            }
+                        } 
+                        else if (((eventState & (uint)PCSC.CARD_STATE.CHANGED) == (uint)PCSC.CARD_STATE.CHANGED) && !bFirstLoop)    
                         {
                             // State has changed
                             if ((eventState & (uint)PCSC.CARD_STATE.EMPTY) == (uint)PCSC.CARD_STATE.EMPTY)
                             {
                                 // There is no card, card has been removed -> Fire CardRemoved event
-                                CardRemoved((string)Reader);
+                                CardRemoved((string)reader);
                             }
 
                             if (((eventState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT) &&
                                 ((eventState & (uint)PCSC.CARD_STATE.PRESENT) != (currentState & (uint)PCSC.CARD_STATE.PRESENT)))
                             {
                                 // There is a card in the reader -> Fire CardInserted event
-                                CardInserted((string)Reader);
+                                CardInserted(reader);
                             }
 
                             if ((eventState & (uint)PCSC.CARD_STATE.ATRMATCH) == (uint)PCSC.CARD_STATE.ATRMATCH)
                             {
                                 // There is a card in the reader and it matches the ATR we were expecting-> Fire CardInserted event
-                                CardInserted((string)Reader);
+                                CardInserted(reader);
                             }
                         }
 
                         // The current stateis now the event state
-                        readerState[0].m_dwCurrentState = eventState;
+                        readerState[0].CurrentState = eventState;
 
                         bFirstLoop = false;
                     }

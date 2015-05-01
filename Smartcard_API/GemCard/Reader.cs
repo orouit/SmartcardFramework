@@ -203,19 +203,19 @@ namespace Core.Smartcard
                 UInt32 nbReaders = 1;
                 PCSC.SCard_ReaderState[] readerState = new PCSC.SCard_ReaderState[nbReaders];
 
-                readerState[0].m_dwCurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
-                readerState[0].m_szReader = (string)Reader;
+                readerState[0].CurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
+                readerState[0].Reader = (string)Reader;
 
                 UInt32 eventState;
-                UInt32 currentState = readerState[0].m_dwCurrentState;
+                UInt32 currentState = readerState[0].CurrentState;
 
                 // Card detection loop
                 do
                 {
                     if (PCSC.SCardGetStatusChange(hContext, WAIT_TIME, readerState, nbReaders) == 0)
                     {
-                        eventState = readerState[0].m_dwEventState;
-                        currentState = readerState[0].m_dwCurrentState;
+                        eventState = readerState[0].EventState;
+                        currentState = readerState[0].CurrentState;
 
                         // Check state
                         if (((eventState & (uint)PCSC.CARD_STATE.CHANGED) == (uint)PCSC.CARD_STATE.CHANGED) && !bFirstLoop)
@@ -242,7 +242,7 @@ namespace Core.Smartcard
                         }
 
                         // The current stateis now the event state
-                        readerState[0].m_dwCurrentState = eventState;
+                        readerState[0].CurrentState = eventState;
 
                         bFirstLoop = false;
                     }
@@ -285,19 +285,19 @@ namespace Core.Smartcard
                 UInt32 nbReaders = 1;
                 PCSC.SCard_ReaderState[] readerState = new PCSC.SCard_ReaderState[nbReaders];
 
-                readerState[0].m_dwCurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
-                readerState[0].m_szReader = (string)Reader;
+                readerState[0].CurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
+                readerState[0].Reader = (string)Reader;
 
                 UInt32 eventState;
-                UInt32 currentState = readerState[0].m_dwCurrentState;
+                UInt32 currentState = readerState[0].CurrentState;
 
                 // Card detection loop
                 do
                 {
                     if (PCSC.SCardGetStatusChange(hContext, WAIT_TIME, readerState, nbReaders) == 0)
                     {
-                        eventState = readerState[0].m_dwEventState;
-                        currentState = readerState[0].m_dwCurrentState;
+                        eventState = readerState[0].EventState;
+                        currentState = readerState[0].CurrentState;
 
                         // Check state
                         if (((eventState & (uint)PCSC.CARD_STATE.CHANGED) == (uint)PCSC.CARD_STATE.CHANGED) && !bFirstLoop)
@@ -324,7 +324,7 @@ namespace Core.Smartcard
                         }
 
                         // The current stateis now the event state
-                        readerState[0].m_dwCurrentState = eventState;
+                        readerState[0].CurrentState = eventState;
 
                         bFirstLoop = false;
                     }

@@ -10,10 +10,12 @@ using System.Xml;
 
 using Core.Smartcard;
 using SmartCardPlayer;
+using Core.Utility;
 
 namespace TestGemCard
 {
-    delegate void   EnableButtonDelegate(Button btn, bool state);
+    delegate void EnableButtonDelegate(Button btn, bool state);
+    delegate void SetTextBoxTextDelegate(TextBox txtBox, string text);
 
 	/// <summary>
 	/// MainForm of the Application
@@ -44,20 +46,21 @@ namespace TestGemCard
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.TextBox textDOut;
 		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.ComboBox comboReader;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox comboReader;
+        private System.Windows.Forms.TextBox txtboxATR;
+        private System.Windows.Forms.CheckBox checkBoxEnterAPDUManually;
 
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		private	CardBase	m_iCard = null;
-		private	APDUPlayer	m_apduPlayer = null;
-		private	APDUParam	m_apduParam = null;
-        const string DefaultReader = "Gemplus USB Smart Card Reader 0";
-        private TextBox txtboxATR;
-        private Label label10;
-		const	string	ApduListFile = "ApduList.xml";
+		private	CardBase	iCard = null;
+		private	APDUPlayer	apduPlayer = null;
+		private	APDUParam	apduParam = null;
+		const string	APDU_LIST_FILE = "ApduList.xml";
+        const string DEFAULT_READER = "Gemplus USB Smart Card Reader 0";
 
 		public MainForm()
 		{
@@ -79,9 +82,9 @@ namespace TestGemCard
 
 			SetupReaderList();
 			LoadApduList();
-
+            checkBoxEnterAPDUManually.Checked = true;
+            EnableEnterAPDUManually(true);
 		}
-
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -132,6 +135,7 @@ namespace TestGemCard
             this.comboReader = new System.Windows.Forms.ComboBox();
             this.txtboxATR = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.checkBoxEnterAPDUManually = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel_Sw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel_Info)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -174,12 +178,12 @@ namespace TestGemCard
             // 
             // statusBar
             // 
-            this.statusBar.Location = new System.Drawing.Point(0, 238);
+            this.statusBar.Location = new System.Drawing.Point(0, 268);
             this.statusBar.Name = "statusBar";
             this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.statusBarPanel_Sw,
             this.statusBarPanel_Info});
-            this.statusBar.Size = new System.Drawing.Size(440, 24);
+            this.statusBar.Size = new System.Drawing.Size(500, 24);
             this.statusBar.TabIndex = 7;
             // 
             // statusBarPanel_Sw
@@ -224,7 +228,7 @@ namespace TestGemCard
             this.groupBox1.Controls.Add(this.textClass);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textData);
-            this.groupBox1.Location = new System.Drawing.Point(16, 104);
+            this.groupBox1.Location = new System.Drawing.Point(12, 134);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(408, 128);
             this.groupBox1.TabIndex = 10;
@@ -259,6 +263,7 @@ namespace TestGemCard
             // textLe
             // 
             this.textLe.Location = new System.Drawing.Point(32, 64);
+            this.textLe.MaxLength = 4;
             this.textLe.Name = "textLe";
             this.textLe.Size = new System.Drawing.Size(40, 20);
             this.textLe.TabIndex = 10;
@@ -274,6 +279,7 @@ namespace TestGemCard
             // textP2
             // 
             this.textP2.Location = new System.Drawing.Point(104, 40);
+            this.textP2.MaxLength = 2;
             this.textP2.Name = "textP2";
             this.textP2.Size = new System.Drawing.Size(24, 20);
             this.textP2.TabIndex = 8;
@@ -289,6 +295,7 @@ namespace TestGemCard
             // textP1
             // 
             this.textP1.Location = new System.Drawing.Point(48, 40);
+            this.textP1.MaxLength = 2;
             this.textP1.Name = "textP1";
             this.textP1.Size = new System.Drawing.Size(24, 20);
             this.textP1.TabIndex = 6;
@@ -304,8 +311,8 @@ namespace TestGemCard
             // textIns
             // 
             this.textIns.Location = new System.Drawing.Point(104, 16);
+            this.textIns.MaxLength = 2;
             this.textIns.Name = "textIns";
-            this.textIns.ReadOnly = true;
             this.textIns.Size = new System.Drawing.Size(24, 20);
             this.textIns.TabIndex = 4;
             // 
@@ -320,8 +327,8 @@ namespace TestGemCard
             // textClass
             // 
             this.textClass.Location = new System.Drawing.Point(48, 16);
+            this.textClass.MaxLength = 2;
             this.textClass.Name = "textClass";
-            this.textClass.ReadOnly = true;
             this.textClass.Size = new System.Drawing.Size(24, 20);
             this.textClass.TabIndex = 2;
             // 
@@ -356,7 +363,7 @@ namespace TestGemCard
             this.txtboxATR.Location = new System.Drawing.Point(205, 34);
             this.txtboxATR.Name = "txtboxATR";
             this.txtboxATR.ReadOnly = true;
-            this.txtboxATR.Size = new System.Drawing.Size(211, 20);
+            this.txtboxATR.Size = new System.Drawing.Size(283, 20);
             this.txtboxATR.TabIndex = 13;
             // 
             // label10
@@ -368,10 +375,22 @@ namespace TestGemCard
             this.label10.TabIndex = 14;
             this.label10.Text = "ATR";
             // 
+            // checkBoxEnterAPDUManually
+            // 
+            this.checkBoxEnterAPDUManually.AutoSize = true;
+            this.checkBoxEnterAPDUManually.Location = new System.Drawing.Point(23, 99);
+            this.checkBoxEnterAPDUManually.Name = "checkBoxEnterAPDUManually";
+            this.checkBoxEnterAPDUManually.Size = new System.Drawing.Size(129, 17);
+            this.checkBoxEnterAPDUManually.TabIndex = 15;
+            this.checkBoxEnterAPDUManually.Text = "Enter APDU Manually";
+            this.checkBoxEnterAPDUManually.UseVisualStyleBackColor = true;
+            this.checkBoxEnterAPDUManually.CheckedChanged += new System.EventHandler(this.CheckBoxEnterAPDUManually_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(440, 262);
+            this.ClientSize = new System.Drawing.Size(500, 292);
+            this.Controls.Add(this.checkBoxEnterAPDUManually);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.txtboxATR);
             this.Controls.Add(this.comboReader);
@@ -410,13 +429,13 @@ namespace TestGemCard
 		{
 			try
 			{
-				m_iCard.Connect((string) comboReader.SelectedItem, SHARE.Shared, PROTOCOL.T0orT1);
+				iCard.Connect((string) comboReader.SelectedItem, SHARE.Shared, PROTOCOL.T0orT1);
 
                 try
                 {
                     // Get the ATR of the card
-                    byte[] atrValue = m_iCard.GetAttribute(SCARD_ATTR_VALUE.ATR_STRING);
-                    txtboxATR.Text = ByteArrayToString(atrValue);
+                    byte[] atrValue = iCard.GetAttribute(SCARD_ATTR_VALUE.ATR_STRING);
+                    txtboxATR.Text = ByteArray.ToString(atrValue);
                 }
                 catch (Exception)
                 {
@@ -443,11 +462,12 @@ namespace TestGemCard
 		{
 			try
 			{
-				m_iCard.Disconnect(DISCONNECT.Unpower);
+				iCard.Disconnect(DISCONNECT.Unpower);
 
 				btnConnect.Enabled = true;
 				btnDisconnect.Enabled = false;
 				btnTransmit.Enabled = false;
+                txtboxATR.Text = string.Empty;
 
 				statusBarPanel_Info.Text = "Card disconnected";
 			}
@@ -461,18 +481,19 @@ namespace TestGemCard
 		{
 			try
 			{
-				APDUResponse	apduResp = m_apduPlayer.ProcessCommand((string) comboApdu.SelectedItem, BuildParam());
-
-				if (apduResp.Data != null)
-				{
-					StringBuilder	sDataOut = new StringBuilder(apduResp.Data.Length * 2);
-					for (int nI = 0; nI < apduResp.Data.Length; nI++)
-						sDataOut.AppendFormat("{0:X02}", apduResp.Data[nI]);
-
-                    textDOut.Text = ByteArrayToString(apduResp.Data);
-				}
-				else
-					textDOut.Text = "";
+                APDUResponse apduResp = null;
+                if (checkBoxEnterAPDUManually.Checked)
+                {
+                    apduResp = apduPlayer.ProcessCommand(textClass.Text, textIns.Text, BuildAPDUParameters());
+                }
+                else
+                {
+                    apduResp = apduPlayer.ProcessCommand((string)comboApdu.SelectedItem, BuildAPDUParameters());
+                }
+				
+                textDOut.Text = (apduResp.Data != null) 
+                    ? ByteArray.ToString(apduResp.Data)
+                    : string.Empty;
 
 				statusBarPanel_Sw.Text = string.Format("{0:X04}", apduResp.Status);
 				statusBarPanel_Info.Text = "Command sent";
@@ -487,20 +508,20 @@ namespace TestGemCard
 			}
 		}
 
-
 		private void SelectICard()
 		{
 			try
 			{
-				if (m_iCard != null)
-					m_iCard.Disconnect(DISCONNECT.Unpower);
+                if (iCard != null)
+                {
+                    iCard.Disconnect(DISCONNECT.Unpower);
+                }
 
-				m_iCard = new CardNative();
+				iCard = new CardNative();
 				statusBarPanel_Info.Text = "CardNative implementation used";
 
-                m_iCard.OnCardInserted += new CardInsertedEventHandler(m_iCard_OnCardInserted);
-                m_iCard.OnCardRemoved += new CardRemovedEventHandler(m_iCard_OnCardRemoved);
-
+                iCard.OnCardInserted += new CardInsertedEventHandler(iCard_OnCardInserted);
+                iCard.OnCardRemoved += new CardRemovedEventHandler(iCard_OnCardRemoved);
 			}
 			catch(Exception ex)
 			{
@@ -515,47 +536,38 @@ namespace TestGemCard
         /// <summary>
         /// CardRemovedEventHandler
         /// </summary>
-        private void m_iCard_OnCardRemoved(object sender, string reader)
+        private void iCard_OnCardRemoved(object sender, string reader)
         {
             btnConnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] {btnConnect, false});
             btnDisconnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnDisconnect, false });
             btnTransmit.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnTransmit, false });
-        }
-
-
-        protected void    EnableButton(Button btn, bool enable)
-        {
-            btn.Enabled = enable;
+            txtboxATR.Invoke(new SetTextBoxTextDelegate(SetText), new object[] { txtboxATR, string.Empty });
         }
 
         /// <summary>
         /// CardInsertedEventHandler
         /// </summary>
-        private void m_iCard_OnCardInserted(object sender, string reader)
+        private void iCard_OnCardInserted(object sender, string reader)
         {
             btnConnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnConnect, true });
             btnDisconnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnDisconnect, false });
             btnTransmit.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnTransmit, false });
         }
 
-        
-        static private string ByteArrayToString(byte[] data)
+        #region Invoke methods
+
+        private void EnableButton(Button btn, bool enable)
         {
-            StringBuilder sDataOut;
-
-            if (data != null)
-            {
-                sDataOut = new StringBuilder(data.Length * 2);
-                for (int nI = 0; nI < data.Length; nI++)
-                    sDataOut.AppendFormat("{0:X02}", data[nI]);
-            }
-            else
-                sDataOut = new StringBuilder();
-
-            return sDataOut.ToString();
+            btn.Enabled = enable;
         }
 
+        private void SetText(TextBox txtBox, string text)
+        {
+            txtBox.Text = text;
+        }
 
+        #endregion
+        
         /// <summary>
         /// Loads the APDU list
         /// </summary>
@@ -564,10 +576,10 @@ namespace TestGemCard
 			try
 			{
 				// Create the APDU player
-				m_apduPlayer = new APDUPlayer(ApduListFile, m_iCard);
+                apduPlayer = new APDUPlayer(APDU_LIST_FILE, iCard);
 
 				// Get the list of APDUs and setup teh combo
-				comboApdu.Items.AddRange(m_apduPlayer.APDUNames);
+				comboApdu.Items.AddRange(apduPlayer.APDUNames);
 				comboApdu.SelectedIndex = 0;
 			}
 			catch(Exception ex)
@@ -576,7 +588,7 @@ namespace TestGemCard
 			}
 		}
 
-		private	APDUParam	BuildParam()
+		private	APDUParam BuildAPDUParameters()
 		{
 			byte	bP1 = byte.Parse(textP1.Text, NumberStyles.AllowHexSpecifier);
 			byte	bP2 = byte.Parse(textP2.Text, NumberStyles.AllowHexSpecifier);
@@ -587,15 +599,18 @@ namespace TestGemCard
 			apduParam.P2 = bP2;
             apduParam.Le = bLe;
 
+            byte[] data = ByteArray.Parse(textData.Text);
+            apduParam.Data = data;
+
 			// Update Current param
-			m_apduParam = apduParam.Clone();
+			apduParam = apduParam.Clone();
 
 			return apduParam;
 		}
 
 		private void comboApdu_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			DisplayAPDUCommand(m_apduPlayer.APDUByName((string) comboApdu.SelectedItem));
+			DisplayAPDUCommand(apduPlayer.APDUByName((string) comboApdu.SelectedItem));
 
 			statusBarPanel_Info.Text = "Command Ready";
 			statusBarPanel_Sw.Text = "";
@@ -610,49 +625,38 @@ namespace TestGemCard
 				textP1.Text = string.Format("{0:X02}", apduCmd.P1);
 				textP2.Text = string.Format("{0:X02}", apduCmd.P2);
 				textLe.Text = apduCmd.Le.ToString();
-				
-				if (apduCmd.Data != null)
-				{
-					StringBuilder	sData = new StringBuilder(apduCmd.Data.Length * 2);
-					for (int nI = 0; nI < apduCmd.Data.Length; nI++)
-						sData.AppendFormat("{0:X02}", apduCmd.Data[nI]);
 
-					textData.Text = sData.ToString();
-				}
-				else
-					textData.Text = "";
+                textData.Text = (apduCmd.Data != null)
+                    ? ByteArray.ToString(apduCmd.Data)
+                    : string.Empty;
 
-				m_apduParam = new APDUParam();
+				apduParam = new APDUParam();
                 
-                m_apduParam.P1 = apduCmd.P1;
-                m_apduParam.P2 = apduCmd.P2;
-                m_apduParam.Le = apduCmd.Le;
+                apduParam.P1 = apduCmd.P1;
+                apduParam.P2 = apduCmd.P2;
+                apduParam.Le = apduCmd.Le;
 			}
 		}
 
-		private	void	SetupReaderList()
+		private	void SetupReaderList()
 		{
 			try
 			{
-				string[] sListReaders = m_iCard.ListReaders();
+				string[] sListReaders = iCard.ListReaders();
 				comboReader.Items.Clear();
 
 				if (sListReaders != null)
 				{
-					for (int nI = 0; nI < sListReaders.Length; nI++)
-						comboReader.Items.Add(sListReaders[nI]);
+                    for (int nI = 0; nI < sListReaders.Length; nI++)
+                    {
+                        comboReader.Items.Add(sListReaders[nI]);
+                    }
 
 					comboReader.SelectedIndex = 0;
 
                     btnConnect.Enabled = false;
                     btnDisconnect.Enabled = false;
                     btnTransmit.Enabled = false;
-
-                    //// Start waiting for a card
-                    //string reader = (string)comboReader.SelectedItem;
-                    //m_iCard.StartCardEvents(reader);
-
-                    //statusBarPanel_Info.Text = "Waiting for a card";
 				}
 			}
 			catch(Exception ex)
@@ -662,14 +666,12 @@ namespace TestGemCard
 			}
 		}
 
-
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             try
             {
-                m_iCard.Disconnect(DISCONNECT.Unpower);
-
-                m_iCard.StopCardEvents();
+                iCard.Disconnect(DISCONNECT.Unpower);
+                iCard.StopCardEvents();
             }
             catch
             {
@@ -685,7 +687,7 @@ namespace TestGemCard
         {
             try
             {
-                m_iCard.StopCardEvents();
+                iCard.StopCardEvents();
 
                 // Get the current selection
                 int idx = comboReader.SelectedIndex;
@@ -693,7 +695,7 @@ namespace TestGemCard
                 {
                     // Start waiting for a card
                     string reader = (string)comboReader.SelectedItem;
-                    m_iCard.StartCardEvents(reader);
+                    iCard.StartCardEvents(reader);
 
                     statusBarPanel_Info.Text = "Waiting for a card";
                 }
@@ -704,5 +706,27 @@ namespace TestGemCard
                 btnConnect.Enabled = false;
             }
         }
-	}
+
+        private void CheckBoxEnterAPDUManually_CheckedChanged(object sender, EventArgs e)
+        {
+            EnableEnterAPDUManually(checkBoxEnterAPDUManually.Checked);
+        }
+
+        private void EnableEnterAPDUManually(bool enable)
+        {
+            comboApdu.Enabled = !enable;
+            textClass.Enabled = enable;
+            textIns.Enabled = enable;
+
+            if (enable)
+            {
+                textIns.Text = string.Empty;
+                textClass.Text = string.Empty;
+                textData.Text = string.Empty;
+                textP1.Text = string.Empty;
+                textP2.Text = string.Empty;
+                textLe.Text = "0";
+            }
+        }
+    }
 }
