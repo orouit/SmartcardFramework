@@ -17,7 +17,8 @@ namespace Core.Smartcard
 		/// <summary>
 		///	Status bytes length
 		/// </summary>
-		public const int SW_LENGTH = 2;		
+		public const uint SW_LENGTH = 2;
+        public const uint MAX_LENGHT = 255;
 
 		private byte[]	m_baData = null;	
 		private byte	m_bSw1;

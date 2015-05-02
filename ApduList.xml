@@ -14,4 +14,6 @@
 	<Apdu Name="Update Record 3" Class="A0" Ins="DC" P1="3" P2="4" P3="28" Data="4F6C6976696572204D616973FFFF07913344026414F8FFFFFFFFFFFF" />
 	<Apdu Name="Update Record 4" Class="A0" Ins="DC" P1="3" P2="4" P3="DL" Data="4F6C69766965722054726176FFFF07913344325628F2FFFFFFFFFFFF" />
 	<Apdu Name="Update Record 5" Class="A0" Ins="DC" P1="3" P2="4" P3="28"  Data="4F6C6976696572204D6F62FFFFFF07913326500850F0FFFFFFFFFFFF" />
+  <Apdu Name="Get PCIC UUID" Class="FF" Ins="CA" P1="0" P2="0" P3="0"/>
+  <Apdu Name="Authenticate MIFARE" Class="FF" Ins="86" P1="0" P2="0" P3="5" Data="0100026000"/>
 </ApduList>

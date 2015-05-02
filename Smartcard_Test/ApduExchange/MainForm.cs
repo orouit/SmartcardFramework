@@ -56,10 +56,11 @@ namespace TestGemCard
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		private	CardBase	iCard = null;
-		private	APDUPlayer	apduPlayer = null;
-		private	APDUParam	apduParam = null;
-		const string	APDU_LIST_FILE = "ApduList.xml";
+		private	CardBase iCard = null;
+		private	APDUPlayer apduPlayer = null;
+		private	APDUParam apduParam = null;
+
+		const string APDU_LIST_FILE = "ApduList.xml";
         const string DEFAULT_READER = "Gemplus USB Smart Card Reader 0";
 
 		public MainForm()
@@ -538,10 +539,20 @@ namespace TestGemCard
         /// </summary>
         private void iCard_OnCardRemoved(object sender, string reader)
         {
-            btnConnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] {btnConnect, false});
-            btnDisconnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnDisconnect, false });
-            btnTransmit.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnTransmit, false });
-            txtboxATR.Invoke(new SetTextBoxTextDelegate(SetText), new object[] { txtboxATR, string.Empty });
+            if (this.InvokeRequired)
+            {
+                btnConnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnConnect, false });
+                btnDisconnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnDisconnect, false });
+                btnTransmit.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnTransmit, false });
+                txtboxATR.Invoke(new SetTextBoxTextDelegate(SetText), new object[] { txtboxATR, string.Empty });
+            }
+            else
+            {
+                btnConnect.Enabled = false;
+                btnDisconnect.Enabled = false;
+                btnTransmit.Enabled = false;
+                txtboxATR.Text = string.Empty;
+            }
         }
 
         /// <summary>
@@ -549,9 +560,18 @@ namespace TestGemCard
         /// </summary>
         private void iCard_OnCardInserted(object sender, string reader)
         {
-            btnConnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnConnect, true });
-            btnDisconnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnDisconnect, false });
-            btnTransmit.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnTransmit, false });
+            if (this.InvokeRequired)
+            {
+                btnConnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnConnect, true });
+                btnDisconnect.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnDisconnect, false });
+                btnTransmit.Invoke(new EnableButtonDelegate(EnableButton), new object[] { btnTransmit, false });
+            }
+            else
+            {
+                btnConnect.Enabled = true;
+                btnDisconnect.Enabled = false;
+                btnTransmit.Enabled = false;
+            }
         }
 
         #region Invoke methods
@@ -600,7 +620,10 @@ namespace TestGemCard
             apduParam.Le = bLe;
 
             byte[] data = ByteArray.Parse(textData.Text);
-            apduParam.Data = data;
+            if (data.Length > 0)
+            {
+                apduParam.Data = data;
+            }
 
 			// Update Current param
 			apduParam = apduParam.Clone();

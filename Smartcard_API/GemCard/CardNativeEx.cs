@@ -12,11 +12,10 @@ namespace Core.Smartcard
 {
     class CardNativeEx : CardBaseEx, IDisposable
     {
-        private IntPtr m_hContext = IntPtr.Zero;
-        private IntPtr m_hCard = IntPtr.Zero;
-		private	UInt32	m_nProtocol = (uint) PROTOCOL.T0;
-		private	int	m_nLastError = 0;
-        const int SCARD_S_SUCCESS = 0;
+        private IntPtr context = IntPtr.Zero;
+        private IntPtr cardHandle = IntPtr.Zero;
+		private	UInt32	protocol = (uint) PROTOCOL.T0;
+		private	int	lastError = 0;
 
 		/// <summary>
 		/// Default constructor
@@ -54,12 +53,12 @@ namespace Core.Smartcard
             UInt32 pchReaders = 0;
 			IntPtr	szListReaders = IntPtr.Zero;
 
-			m_nLastError = PCSC.SCardListReaders(m_hContext, null, szListReaders, out pchReaders);
-			if (m_nLastError == 0)
+			lastError = PCSC.SCardListReaders(context, null, szListReaders, out pchReaders);
+			if (lastError == 0)
 			{
 				szListReaders = Marshal.AllocHGlobal((int) pchReaders);
-				m_nLastError = PCSC.SCardListReaders(m_hContext, null, szListReaders, out pchReaders);
-				if (m_nLastError == 0)
+				lastError = PCSC.SCardListReaders(context, null, szListReaders, out pchReaders);
+				if (lastError == 0)
 				{
 					char[] caReadersData = new char[pchReaders];
 					int	nbReaders = 0;
@@ -107,7 +106,7 @@ namespace Core.Smartcard
 
 			ReleaseContext();
 
-            ThrowSmartcardException("SCardListReaders", m_nLastError);
+            ThrowSmartcardException("SCardListReaders", lastError);
 
 			return sListReaders;
 		}
@@ -124,16 +123,16 @@ namespace Core.Smartcard
 		/// <param name="Scope"></param>
 		public void EstablishContext(SCOPE Scope)
 		{
-			IntPtr hContext = Marshal.AllocHGlobal(Marshal.SizeOf(m_hContext));
+			IntPtr hContext = Marshal.AllocHGlobal(Marshal.SizeOf(context));
 
-			m_nLastError = PCSC.SCardEstablishContext((uint) Scope, IntPtr.Zero, IntPtr.Zero, hContext);
-			if (m_nLastError != 0)
+			lastError = PCSC.SCardEstablishContext((uint) Scope, IntPtr.Zero, IntPtr.Zero, hContext);
+			if (lastError != 0)
 			{
 				Marshal.FreeHGlobal(hContext);
-                ThrowSmartcardException("SCardEstablishContext", m_nLastError);
+                ThrowSmartcardException("SCardEstablishContext", lastError);
 			}
 
-            m_hContext = Marshal.ReadIntPtr(hContext);
+            context = Marshal.ReadIntPtr(hContext);
 
 			Marshal.FreeHGlobal(hContext);
 		}
@@ -146,12 +145,12 @@ namespace Core.Smartcard
 		/// </summary>
 		public void ReleaseContext()
 		{
-			if (PCSC.SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
+			if (PCSC.SCardIsValidContext(context) == PCSC.SCARD_S_SUCCESS)
 			{
-				m_nLastError = PCSC.SCardReleaseContext(m_hContext);
-                ThrowSmartcardException("SCardReleaseContext", m_nLastError);
+				lastError = PCSC.SCardReleaseContext(context);
+                ThrowSmartcardException("SCardReleaseContext", lastError);
 
-                m_hContext = IntPtr.Zero;
+                context = IntPtr.Zero;
 			}
 		}
 
@@ -173,25 +172,25 @@ namespace Core.Smartcard
 		{
 			EstablishContext(SCOPE.User);
 
-			IntPtr	hCard = Marshal.AllocHGlobal(Marshal.SizeOf(m_hCard));
-			IntPtr	pProtocol = Marshal.AllocHGlobal(Marshal.SizeOf(m_nProtocol));
+			IntPtr	hCard = Marshal.AllocHGlobal(Marshal.SizeOf(cardHandle));
+			IntPtr	pProtocol = Marshal.AllocHGlobal(Marshal.SizeOf(protocol));
 
-			m_nLastError = PCSC.SCardConnect(m_hContext, 
+			lastError = PCSC.SCardConnect(context, 
 				Reader, 
 				(uint) ShareMode, 
 				(uint) PreferredProtocols, 
 				hCard,
 				pProtocol);
 
-			if (m_nLastError != 0)
+			if (lastError != 0)
 			{
 				Marshal.FreeHGlobal(hCard);
 				Marshal.FreeHGlobal(pProtocol);
-                ThrowSmartcardException("SCardConnect", m_nLastError);
+                ThrowSmartcardException("SCardConnect", lastError);
 			}
 
-            m_hCard = Marshal.ReadIntPtr(hCard);
-			m_nProtocol = (uint) Marshal.ReadInt32(pProtocol);
+            cardHandle = Marshal.ReadIntPtr(hCard);
+			protocol = (uint) Marshal.ReadInt32(pProtocol);
 
 			Marshal.FreeHGlobal(hCard);
 			Marshal.FreeHGlobal(pProtocol);
@@ -207,14 +206,14 @@ namespace Core.Smartcard
 		/// <param name="Disposition"></param>
 		public override void Disconnect(DISCONNECT Disposition)
 		{
-            if (PCSC.SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
+            if (PCSC.SCardIsValidContext(context) == PCSC.SCARD_S_SUCCESS)
 			{
-				m_nLastError = PCSC.SCardDisconnect(m_hCard, (uint) Disposition);
-                m_hCard = IntPtr.Zero;
+				lastError = PCSC.SCardDisconnect(cardHandle, (uint) Disposition);
+                cardHandle = IntPtr.Zero;
 
                 try
                 {
-                    ThrowSmartcardException("SCardDisconnect", m_nLastError);
+                    ThrowSmartcardException("SCardDisconnect", lastError);
                 }
                 finally
                 {
@@ -239,44 +238,43 @@ namespace Core.Smartcard
 		/// <returns>An APDUResponse object with the response from the card</returns>
 		public override APDUResponse Transmit(APDUCommand ApduCmd)
 		{
-			uint	RecvLength = (uint) (ApduCmd.Le + APDUResponse.SW_LENGTH);
-			byte[]	ApduBuffer = null;
-			byte[]	ApduResponse = new byte[ApduCmd.Le + APDUResponse.SW_LENGTH];
-			PCSC.SCard_IO_Request	ioRequest = new PCSC.SCard_IO_Request();
-			ioRequest.Protocol = m_nProtocol;
-			ioRequest.PciLength = 8;
+            // Must verify that it works with all type of cards
+            uint outputLength = (ApduCmd.Le == 0)
+                ? APDUResponse.MAX_LENGHT
+                : (ApduCmd.Le + APDUResponse.SW_LENGTH);
+            byte[] ApduBuffer = null;
+            byte[] ApduResponse = new byte[outputLength];
 
-			// Build the command APDU
-			if (ApduCmd.Data == null)
-			{
-				ApduBuffer = new byte[APDUCommand.APDU_MIN_LENGTH + ((ApduCmd.Le != 0) ? 1 : 0)];
+            PCSC.SCard_IO_Request ioRequest = new PCSC.SCard_IO_Request();
+            ioRequest.Protocol = protocol;
+            ioRequest.PciLength = (uint)Marshal.SizeOf(ioRequest);
 
-                if (ApduCmd.Le != 0)
-                {
-                    ApduBuffer[4] = (byte)ApduCmd.Le;
-                }
-			}
-			else
-			{
-				ApduBuffer = new byte[APDUCommand.APDU_MIN_LENGTH + 1 + ApduCmd.Data.Length];
+            // Build the command APDU
+            if (ApduCmd.Data == null)
+            {
+                ApduBuffer = new byte[APDUCommand.APDU_MIN_LENGTH + 1]; // Pass the Le = 0 as well
+                ApduBuffer[4] = (byte)ApduCmd.Le;
+            }
+            else
+            {
+                ApduBuffer = new byte[APDUCommand.APDU_MIN_LENGTH + 1 + ApduCmd.Data.Length];
                 Buffer.BlockCopy(ApduCmd.Data, 0, ApduBuffer, APDUCommand.APDU_MIN_LENGTH + 1, ApduCmd.Data.Length);
-				ApduBuffer[APDUCommand.APDU_MIN_LENGTH] = (byte) ApduCmd.Data.Length;
-			}
+                ApduBuffer[APDUCommand.APDU_MIN_LENGTH] = (byte)ApduCmd.Data.Length;
+            }
 
-			ApduBuffer[0] = ApduCmd.Class;
-			ApduBuffer[1] = ApduCmd.Ins;
-			ApduBuffer[2] = ApduCmd.P1;
-			ApduBuffer[3] = ApduCmd.P2;
+            ApduBuffer[0] = ApduCmd.Class;
+            ApduBuffer[1] = ApduCmd.Ins;
+            ApduBuffer[2] = ApduCmd.P1;
+            ApduBuffer[3] = ApduCmd.P2;
 
-			m_nLastError = PCSC.SCardTransmit(m_hCard, ref ioRequest, ApduBuffer, (uint) ApduBuffer.Length, IntPtr.Zero, ApduResponse, out RecvLength);
-            ThrowSmartcardException("SCardTransmit", m_nLastError);
-			
-			byte[] ApduData = new byte[RecvLength];
-            Buffer.BlockCopy(ApduResponse, 0, ApduData, 0, (int)RecvLength); 
+            lastError = PCSC.SCardTransmit(cardHandle, ref ioRequest, ApduBuffer, (uint)ApduBuffer.Length, IntPtr.Zero, ApduResponse, out outputLength);
+            ThrowSmartcardException("SCardTransmit", lastError);
 
-			return new APDUResponse(ApduData);
-		}
+            byte[] ApduData = new byte[outputLength];
+            Buffer.BlockCopy(ApduResponse, 0, ApduData, 0, (int)outputLength);
 
+            return new APDUResponse(ApduData);
+        }
 
         /// <summary>
         /// Wraps the PSCS function
@@ -286,10 +284,10 @@ namespace Core.Smartcard
         /// </summary>
         public override void BeginTransaction()
         {
-            if (PCSC.SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
+            if (PCSC.SCardIsValidContext(context) == PCSC.SCARD_S_SUCCESS)
             {
-                m_nLastError = PCSC.SCardBeginTransaction(m_hCard);
-                ThrowSmartcardException("SCardBeginTransaction", m_nLastError);
+                lastError = PCSC.SCardBeginTransaction(cardHandle);
+                ThrowSmartcardException("SCardBeginTransaction", lastError);
             }
         }
 
@@ -303,10 +301,10 @@ namespace Core.Smartcard
         /// <param name="Disposition">A value from DISCONNECT enum</param>
         public override void EndTransaction(DISCONNECT Disposition)
         {
-            if (PCSC.SCardIsValidContext(m_hContext) == SCARD_S_SUCCESS)
+            if (PCSC.SCardIsValidContext(context) == PCSC.SCARD_S_SUCCESS)
             {
-                m_nLastError = PCSC.SCardEndTransaction(m_hCard, (UInt32)Disposition);
-                ThrowSmartcardException("SCardEndTransaction", m_nLastError);
+                lastError = PCSC.SCardEndTransaction(cardHandle, (UInt32)Disposition);
+                ThrowSmartcardException("SCardEndTransaction", lastError);
             }
         }
 
@@ -320,14 +318,14 @@ namespace Core.Smartcard
             byte[] attr = null;
             UInt32 attrLen = 0;
 
-            m_nLastError = PCSC.SCardGetAttrib(m_hCard, AttribId, attr, out attrLen);
-            ThrowSmartcardException("SCardGetAttr", m_nLastError);
+            lastError = PCSC.SCardGetAttrib(cardHandle, AttribId, attr, out attrLen);
+            ThrowSmartcardException("SCardGetAttr", lastError);
 
             if (attrLen != 0)
             {
                 attr = new byte[attrLen];
-                m_nLastError = PCSC.SCardGetAttrib(m_hCard, AttribId, attr, out attrLen);
-                ThrowSmartcardException("SCardGetAttr", m_nLastError);
+                lastError = PCSC.SCardGetAttrib(cardHandle, AttribId, attr, out attrLen);
+                ThrowSmartcardException("SCardGetAttr", lastError);
             }
 
             return attr;
