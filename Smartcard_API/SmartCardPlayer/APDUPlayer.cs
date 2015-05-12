@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 
-namespace SmartCardPlayer
+namespace Core.Smartcard
 {
     /// <summary>
     /// List of sequence name. It is just a Dictionary of string indexed by string
@@ -203,7 +203,7 @@ namespace SmartCardPlayer
         /// <returns>An APDUResponse object with the response of the card </returns>
         public APDUResponse ProcessCommand(string apduName, APDUParam apduParam)
 		{
-			APDUCommand		apduCmd = null;
+			APDUCommand	apduCmd = null;
 		
 			// Get the base APDU
 			apduCmd = APDUByName(apduName);
@@ -231,9 +231,9 @@ namespace SmartCardPlayer
 		/// </summary>
 		/// <param name="command">APDU command name</param>
 		/// <returns>An APDUResponse object with the response of the card </returns>
-		public	APDUResponse	ProcessCommand(string apduName)
+		public	APDUResponse ProcessCommand(string apduName)
 		{
-			APDUCommand		apduCmd = null;
+			APDUCommand apduCmd = null;
 		
 			apduCmd = APDUByName(apduName);
 			if (apduCmd == null)
@@ -241,6 +241,59 @@ namespace SmartCardPlayer
 
 			return ExecuteApduCommand(apduCmd);
 		}
+
+        /// <summary>
+        /// Executes an APDU command
+        /// </summary>
+        /// <param name="apduCmd">APDUCommand object to execute</param>
+        /// <returns>APDUResponse object of the response</returns>
+        public APDUResponse ExecuteApduCommand(APDUCommand apduCmd)
+        {
+            byte bLe = 0;
+
+            // Send the command
+            m_apduResp = m_iCard.Transmit(apduCmd);
+            AddLog(new APDULog(apduCmd, m_apduResp));
+
+            // Check if SW2 can be used as Le for the next call
+            if (m_apduResp.SW1 == 0x9F)
+                m_bLeSW2 = true;
+            else
+                m_bLeSW2 = false;
+
+            if (m_bReplay)
+            {
+                if (m_bCheckSW1 && (m_apduResp.SW1 == m_bSW1Cond))
+                {
+                    // Replay the command with Le = SW2 of response
+                    bLe = m_apduResp.SW2;
+                    m_bCheckSW1 = false;
+                }
+                else if (m_bLeData)
+                {
+                    // Replay the command with Le = Le + Data[m_nDataId - 1] of response
+                    bLe = (byte)(m_apduResp.Data[m_nDataId - 1] + apduCmd.Le);
+                    m_bLeData = false;
+                }
+
+                // Replay the command
+                apduCmd = new APDUCommand(
+                    apduCmd.Class,
+                    apduCmd.Ins,
+                    apduCmd.P1,
+                    apduCmd.P2,
+                    apduCmd.Data,
+                    bLe);
+
+                m_apduResp = m_iCard.Transmit(apduCmd);
+                AddLog(new APDULog(apduCmd, m_apduResp));
+
+                m_bReplay = false;
+            }
+
+            return m_apduResp;
+        }
+
 
         /// <summary>
         /// Process an APDU sequence and execute each of its commands in the sequence order
@@ -461,58 +514,6 @@ namespace SmartCardPlayer
         }
 
         /// <summary>
-        /// Executes an APDU command
-        /// </summary>
-        /// <param name="apduCmd">APDUCommand object to execute</param>
-        /// <returns>APDUResponse object of the response</returns>
-        private APDUResponse ExecuteApduCommand(APDUCommand apduCmd)
-        {
-            byte bLe = 0;
-
-            // Send the command
-            m_apduResp = m_iCard.Transmit(apduCmd);
-            AddLog(new APDULog(apduCmd, m_apduResp));
-
-            // Check if SW2 can be used as Le for the next call
-            if (m_apduResp.SW1 == 0x9F)
-                m_bLeSW2 = true;
-            else
-                m_bLeSW2 = false;
-
-            if (m_bReplay)
-            {
-                if (m_bCheckSW1 && (m_apduResp.SW1 == m_bSW1Cond))
-                {
-                    // Replay the command with Le = SW2 of response
-                    bLe = m_apduResp.SW2;
-                    m_bCheckSW1 = false;
-                }
-                else if (m_bLeData)
-                {
-                    // Replay the command with Le = Le + Data[m_nDataId - 1] of response
-                    bLe = (byte)(m_apduResp.Data[m_nDataId - 1] + apduCmd.Le);
-                    m_bLeData = false;
-                }
-
-                // Replay the command
-                apduCmd = new APDUCommand(
-                    apduCmd.Class,
-                    apduCmd.Ins,
-                    apduCmd.P1,
-                    apduCmd.P2,
-                    apduCmd.Data,
-                    bLe);
-
-                m_apduResp = m_iCard.Transmit(apduCmd);
-                AddLog(new APDULog(apduCmd, m_apduResp));
-
-                m_bReplay = false;
-            }
-
-            return m_apduResp;
-        }
-
-        /// <summary>
         /// Gets the XML node for a Sequence of APDUs
         /// </summary>
         /// <param name="name">Name of the sequence</param>
@@ -545,7 +546,6 @@ namespace SmartCardPlayer
         /// <param name="seqParam">List of parameters</param>
         /// <param name="xmlSeqParam">Parameters of the XML sequence</param>
         /// <returns>The list of parameters to used to process the sequence of APDU commands</returns>
-//        private Dictionary<string, string> ProcessParams(Dictionary<string, string> seqParam, XmlAttributeCollection xmlSeqParam)
         private SequenceParameter ProcessParams(SequenceParameter seqParam, XmlAttributeCollection xmlSeqParam)
         {
             //Dictionary<string, string> l_seqParam = new Dictionary<string, string>();

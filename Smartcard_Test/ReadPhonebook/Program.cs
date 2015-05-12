@@ -11,7 +11,6 @@ using System.Threading;
 
 using Core.Smartcard;
 using Core.GSMHelper;
-using SmartCardPlayer;
 
 namespace TestSmartcard
 {

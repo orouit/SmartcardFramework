@@ -16,4 +16,6 @@
 	<Apdu Name="Update Record 5" Class="A0" Ins="DC" P1="3" P2="4" P3="28"  Data="4F6C6976696572204D6F62FFFFFF07913326500850F0FFFFFFFFFFFF" />
   <Apdu Name="Get PCIC UUID" Class="FF" Ins="CA" P1="0" P2="0" P3="0"/>
   <Apdu Name="Authenticate MIFARE" Class="FF" Ins="86" P1="0" P2="0" P3="5" Data="0100026000"/>
+  <Apdu Name="Read Binary Blocks" Class="FF" Ins="B0" P1="00" P2="00" P3="48"/>
+  <Apdu Name="Update Binary Blocks" Class="FF" Ins="D6" P1="00" P2="04" P3="DL" Data="000102030405060708090A0B0C0D0E0F000102030405060708090A0B0C0D0E0F"/>
 </ApduList>

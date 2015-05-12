@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using System.Xml;
 
 using Core.Smartcard;
-using SmartCardPlayer;
 using Core.Utility;
 
 namespace TestGemCard
@@ -404,6 +403,7 @@ namespace TestGemCard
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnConnect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Smart card Exchange APDU";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);

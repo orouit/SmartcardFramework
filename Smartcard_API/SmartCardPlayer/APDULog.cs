@@ -10,7 +10,7 @@ using System.Text;
 
 using Core.Smartcard;
 
-namespace SmartCardPlayer
+namespace Core.Smartcard
 {
     /// <summary>
     /// This class is used to log a command
