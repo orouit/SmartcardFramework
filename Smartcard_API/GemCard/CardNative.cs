@@ -259,9 +259,17 @@ namespace Core.Smartcard
 			}
 			else
 			{
-				ApduBuffer = new byte[APDUCommand.APDU_MIN_LENGTH + 1 + ApduCmd.Data.Length];
+                int apduBufferLengh = (ApduCmd.Class == 0x90)
+                    ? APDUCommand.APDU_MIN_LENGTH + 1 + ApduCmd.Data.Length + 1
+                    : APDUCommand.APDU_MIN_LENGTH + 1 + ApduCmd.Data.Length;
+
+				ApduBuffer = new byte[apduBufferLengh];
                 Buffer.BlockCopy(ApduCmd.Data, 0, ApduBuffer, APDUCommand.APDU_MIN_LENGTH + 1, ApduCmd.Data.Length);
 				ApduBuffer[APDUCommand.APDU_MIN_LENGTH] = (byte) ApduCmd.Data.Length;
+                if (ApduCmd.Class == 0x90)
+                {
+                    ApduBuffer[apduBufferLengh - 1] = 0;
+                }
 			}
 
 			ApduBuffer[0] = ApduCmd.Class;

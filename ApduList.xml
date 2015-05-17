@@ -19,4 +19,9 @@
   <Apdu Name="Authenticate MIFARE" Class="FF" Ins="86" P1="0" P2="0" P3="5" Data="0100026000"/>
   <Apdu Name="Read Binary Blocks" Class="FF" Ins="B0" P1="00" P2="00" P3="48"/>
   <Apdu Name="Update Binary Blocks" Class="FF" Ins="D6" P1="00" P2="04" P3="DL" Data="000102030405060708090A0B0C0D0E0F000102030405060708090A0B0C0D0E0F"/>
+  <Apdu Name="Store Value Block" Class="FF" Ins="D7" P1="00" P2="4" P3="5" Data="0000000000"/>
+  <Apdu Name="Increment Value Block" Class="FF" Ins="D7" P1="00" P2="00" P3="5" Data="0100000001"/>
+  <Apdu Name="Decrement Value Block" Class="FF" Ins="D7" P1="00" P2="00" P3="5" Data="0200000001"/>
+  <Apdu Name="Read Value Block" Class="FF" Ins="B1" P1="00" P2="00" P3="4"/> 
+  <Apdu Name="Copy Value Block" Class="FF" Ins="D7" P1="00" p2="00" P3="02" Data="0304"/>
 </ApduList>

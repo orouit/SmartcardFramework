@@ -4,6 +4,9 @@
  * @license CPL, CodeProject license 
  */
 
+using Core.Utility;
+using System;
+
 namespace Core.Smartcard.Mifare
 {
     public class MifareHelper
@@ -24,11 +27,11 @@ namespace Core.Smartcard.Mifare
             return lastApduResponse.Status == MifareStatus.SUCCESS;
         }
 
-        public bool ReadBlocks(int startBlock, int numberOfBlocks, out byte[] data)
+        public bool ReadBlocks(int startBlockNumber, int numberOfBlocks, out byte[] data)
         {
             bool success = false;
             data = null;
-            ReadBinaryBlocksCommand readBlocksCmd = new ReadBinaryBlocksCommand((byte)startBlock, (byte)numberOfBlocks);
+            ReadBinaryBlocksCommand readBlocksCmd = new ReadBinaryBlocksCommand((byte)startBlockNumber, (byte)numberOfBlocks);
             lastApduResponse = apduPlayer.ExecuteApduCommand(readBlocksCmd);
 
             if (lastApduResponse.Status == MifareStatus.SUCCESS)
@@ -40,12 +43,76 @@ namespace Core.Smartcard.Mifare
             return success;
         }
 
-        public bool UpdateBlocks(int startBlock, byte[] data)
+        public bool UpdateBlocks(int startBlockNumber, byte[] data)
         {
-            UpdateBinaryBlocksCommand updateBlocksCmd = new UpdateBinaryBlocksCommand((byte)startBlock, data);
+            UpdateBinaryBlocksCommand updateBlocksCmd = new UpdateBinaryBlocksCommand((byte)startBlockNumber, data);
             lastApduResponse = apduPlayer.ExecuteApduCommand(updateBlocksCmd);
 
             return lastApduResponse.Status == MifareStatus.SUCCESS;
+        }
+
+        public bool StoreValueBlock(int blockNumber, Int32 value)
+        {
+            byte[] valueBytes = ByteArray.ReverseBuffer(BitConverter.GetBytes(value));
+            ValueBlockOperationCommand valueOperationCommand = new ValueBlockOperationCommand(ValueBlockOperation.STORE, (byte)blockNumber, valueBytes);
+            lastApduResponse = apduPlayer.ExecuteApduCommand(valueOperationCommand);
+
+            return lastApduResponse.Status == MifareStatus.SUCCESS;
+        }
+
+        public bool IncrementValueBlock(int blockNumber, Int32 value)
+        {
+            byte[] valueBytes = ByteArray.ReverseBuffer(BitConverter.GetBytes(value));
+            ValueBlockOperationCommand valueOperationCommand = new ValueBlockOperationCommand(ValueBlockOperation.INC, (byte)blockNumber, valueBytes);
+            lastApduResponse = apduPlayer.ExecuteApduCommand(valueOperationCommand);
+
+            return lastApduResponse.Status == MifareStatus.SUCCESS;
+        }
+
+        public bool DecrementValueBlock(int blockNumber, Int32 value)
+        {
+            byte[] valueBytes = ByteArray.ReverseBuffer(BitConverter.GetBytes(value));
+            ValueBlockOperationCommand valueOperationCommand = new ValueBlockOperationCommand(ValueBlockOperation.DEC, (byte)blockNumber, valueBytes);
+            lastApduResponse = apduPlayer.ExecuteApduCommand(valueOperationCommand);
+
+            return lastApduResponse.Status == MifareStatus.SUCCESS;
+        }
+
+        public bool CopyValueBlock(int srceBlockNumber, int destBlockNumber)
+        {
+            CopyValueBlockCommand copyBlockCommand = new CopyValueBlockCommand((byte)srceBlockNumber, (byte)destBlockNumber);
+            lastApduResponse = apduPlayer.ExecuteApduCommand(copyBlockCommand);
+
+            return lastApduResponse.Status == MifareStatus.SUCCESS;
+        }
+
+        public bool ReadValueBlock(int blockNumber, out Int32 value)
+        {
+            value = 0;
+            ReadValueBlockCommand readValueBlockCommand = new ReadValueBlockCommand((byte)blockNumber);
+            lastApduResponse = apduPlayer.ExecuteApduCommand(readValueBlockCommand);
+
+            if (lastApduResponse.Status == MifareStatus.SUCCESS)
+            {
+                byte[] valueBytes = ByteArray.ReverseBuffer(lastApduResponse.Data);
+                value = BitConverter.ToInt32(valueBytes, 0);
+            }
+
+            return lastApduResponse.Status == MifareStatus.SUCCESS;
+        }
+
+        public ushort StatusCode
+        {
+            get 
+            {
+                ushort code = 0xFFFF;
+                if (lastApduResponse != null)
+                {
+                    code = lastApduResponse.Status; 
+                }
+
+                return code;
+            }
         }
     }
 }

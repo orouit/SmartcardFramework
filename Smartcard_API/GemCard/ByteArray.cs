@@ -4,6 +4,7 @@
  * @license CPL, CodeProject license 
  */
 
+using System;
 using System.Globalization;
 using System.Text;
 
@@ -42,6 +43,28 @@ namespace Core.Utility
             }
 
             return byteData;
+        }
+
+        static public byte[] Concatenate(byte[] dataA, byte[] dataB)
+        {
+            byte[] result = new byte[dataA.Length + dataB.Length];
+
+            Buffer.BlockCopy(dataA, 0, result, 0, dataA.Length);
+            Buffer.BlockCopy(dataB, 0, result, dataA.Length, dataB.Length);
+
+            return result;
+        }
+
+        static public byte[] ReverseBuffer(byte[] data)
+        {
+            byte[] reversed = new byte[data.Length];
+
+            for (int n = 0; n < data.Length; n++)
+            {
+                reversed[data.Length - n - 1] = data[n];
+            }
+
+            return reversed;
         }
     }
 }

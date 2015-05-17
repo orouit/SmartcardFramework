@@ -19,12 +19,12 @@ namespace Core.Smartcard
 		/// </summary>
 		public	const int	APDU_MIN_LENGTH = 4;
 
-		private	byte	m_bCla;
-		private	byte	m_bIns;
-		private	byte	m_bP1;
-		private	byte	m_bP2;
-		private	byte[]	m_baData;
-		private	byte	m_bLe;	
+		private	byte	bCla;
+		private	byte	bIns;
+		private	byte	bP1;
+		private	byte	bP2;
+		private	byte[]	baData;
+		private	byte	bLe;	
 
 		/// <summary>
 		/// Constructor
@@ -37,12 +37,12 @@ namespace Core.Smartcard
 		/// <param name="bLe">Number of data expected, 0 if none</param>
 		public	APDUCommand(byte bCla, byte bIns, byte bP1, byte bP2, byte[] baData, byte bLe)
 		{
-			m_bCla = bCla;
-			m_bIns = bIns;
-			m_bP1 = bP1;
-			m_bP2 = bP2;
-			m_baData = baData;
-			m_bLe = bLe;
+			this.bCla = bCla;
+			this.bIns = bIns;
+			this.bP1 = bP1;
+			this.bP2 = bP2;
+			this.baData = baData;
+			this.bLe = bLe;
 		}
 
 		/// <summary>
@@ -52,19 +52,19 @@ namespace Core.Smartcard
 		public	void	Update(APDUParam apduParam)
 		{
 			if (apduParam.UseData)
-				m_baData = apduParam.Data;
+				baData = apduParam.Data;
 
 			if (apduParam.UseLe)
-				m_bLe = apduParam.Le;
+				bLe = apduParam.Le;
 
 			if (apduParam.UseP1)
-				m_bP1 = apduParam.P1;
+				bP1 = apduParam.P1;
 
 			if (apduParam.UseP2)
-				m_bP2 = apduParam.P2;
+				bP2 = apduParam.P2;
 
             if (apduParam.UseChannel)
-                m_bCla += apduParam.Channel;
+                bCla += apduParam.Channel;
         }
 
         #region Accessors
@@ -75,7 +75,7 @@ namespace Core.Smartcard
 		{
 			get
 			{
-				return m_bCla;
+				return bCla;
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace Core.Smartcard
 		{
 			get
 			{
-				return m_bIns;
+				return bIns;
 			}
 		}
 
@@ -97,7 +97,7 @@ namespace Core.Smartcard
 		{
 			get
 			{
-				return m_bP1;
+				return bP1;
 			}
 		}
 
@@ -108,7 +108,7 @@ namespace Core.Smartcard
 		{
 			get
 			{
-				return m_bP2;
+				return bP2;
 			}
 		}
 
@@ -119,8 +119,10 @@ namespace Core.Smartcard
 		{
 			get
 			{
-				return m_baData;
+				return baData;
 			}
+
+            protected set { baData = value; }
 		}
 
 		/// <summary>
@@ -130,7 +132,7 @@ namespace Core.Smartcard
 		{
 			get
 			{
-				return m_bLe;
+				return bLe;
 			}
         }
 
@@ -145,16 +147,16 @@ namespace Core.Smartcard
             string strData = null;
             byte
                 bLc = 0,
-                bP3 = m_bLe;    
+                bP3 = bLe;    
 
-            if (m_baData != null)
+            if (baData != null)
             {
-                StringBuilder sData = new StringBuilder(m_baData.Length * 2);
-                for (int nI = 0; nI < m_baData.Length; nI++)
-                    sData.AppendFormat("{0:X02}", m_baData[nI]);
+                StringBuilder sData = new StringBuilder(baData.Length * 2);
+                for (int nI = 0; nI < baData.Length; nI++)
+                    sData.AppendFormat("{0:X02}", baData[nI]);
 
                 strData = "Data=" + sData.ToString();
-                bLc = (byte) m_baData.Length;
+                bLc = (byte) baData.Length;
                 bP3 = bLc;
             }
             
@@ -163,8 +165,8 @@ namespace Core.Smartcard
             StringBuilder strApdu = new StringBuilder();
 
             strApdu.AppendFormat("Class={0:X02} Ins={1:X02} P1={2:X02} P2={3:X02} P3={4:X02} ",
-                m_bCla, m_bIns, m_bP1, m_bP2, bP3);
-            if (m_baData != null)
+                bCla, bIns, bP1, bP2, bP3);
+            if (baData != null)
                 strApdu.Append(strData);
 
             return strApdu.ToString();
