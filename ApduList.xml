@@ -15,13 +15,27 @@
 	<Apdu Name="Update Record 4" Class="A0" Ins="DC" P1="3" P2="4" P3="DL" Data="4F6C69766965722054726176FFFF07913344325628F2FFFFFFFFFFFF" />
 	<Apdu Name="Update Record 5" Class="A0" Ins="DC" P1="3" P2="4" P3="28"  Data="4F6C6976696572204D6F62FFFFFF07913326500850F0FFFFFFFFFFFF" />
   <Apdu Name="Get PCIC UUID" Class="FF" Ins="CA" P1="0" P2="0" P3="0"/>
-  <Apdu Name="Load Authenticate Key" Class="FF" Ins="82" P1="00" P2="00" P3="DL" Data="FFFFFFFFFFFF"/>
-  <Apdu Name="Authenticate MIFARE" Class="FF" Ins="86" P1="0" P2="0" P3="5" Data="0100026000"/>
-  <Apdu Name="Read Binary Blocks" Class="FF" Ins="B0" P1="00" P2="00" P3="48"/>
-  <Apdu Name="Update Binary Blocks" Class="FF" Ins="D6" P1="00" P2="04" P3="DL" Data="000102030405060708090A0B0C0D0E0F000102030405060708090A0B0C0D0E0F"/>
-  <Apdu Name="Store Value Block" Class="FF" Ins="D7" P1="00" P2="4" P3="5" Data="0000000000"/>
-  <Apdu Name="Increment Value Block" Class="FF" Ins="D7" P1="00" P2="00" P3="5" Data="0100000001"/>
-  <Apdu Name="Decrement Value Block" Class="FF" Ins="D7" P1="00" P2="00" P3="5" Data="0200000001"/>
-  <Apdu Name="Read Value Block" Class="FF" Ins="B1" P1="00" P2="00" P3="4"/> 
-  <Apdu Name="Copy Value Block" Class="FF" Ins="D7" P1="00" p2="00" P3="02" Data="0304"/>
+  <Apdu Name="Mifare - Load Authenticate Key" Class="FF" Ins="82" P1="00" P2="00" P3="DL" Data="FFFFFFFFFFFF"/>
+  <Apdu Name="Mifare - Authenticate MIFARE" Class="FF" Ins="86" P1="0" P2="0" P3="5" Data="0100026000"/>
+  <Apdu Name="Mifare - Read Binary Blocks" Class="FF" Ins="B0" P1="00" P2="00" P3="48"/>
+  <Apdu Name="Mifare - Update Binary Blocks" Class="FF" Ins="D6" P1="00" P2="04" P3="DL" Data="000102030405060708090A0B0C0D0E0F000102030405060708090A0B0C0D0E0F"/>
+  <Apdu Name="Mifare - Store Value Block" Class="FF" Ins="D7" P1="00" P2="4" P3="5" Data="0000000000"/>
+  <Apdu Name="Mifare - Increment Value Block" Class="FF" Ins="D7" P1="00" P2="00" P3="5" Data="0100000001"/>
+  <Apdu Name="Mifare - Decrement Value Block" Class="FF" Ins="D7" P1="00" P2="00" P3="5" Data="0200000001"/>
+  <Apdu Name="Mifare - Read Value Block" Class="FF" Ins="B1" P1="00" P2="00" P3="4"/> 
+  <Apdu Name="Mifare - Copy Value Block" Class="FF" Ins="D7" P1="00" p2="00" P3="02" Data="0304"/>
+  <Apdu Name="DESFire - Authenticate" Class="90" Ins="0A" P1="00" P2="00" Data="00" P3="01"/>
+  <Apdu Name="DESFire - Next Frame" Class="90" Ins="AF" P1="00" P2="00" Data="0000000000000000" P3="08"/>
+  <Apdu Name="SAM - Get Card Serial Number" Class="80" Ins="14" P1="00" P2="00" P3="08"/> 
+  <Apdu Name="SAM - Get Number of files" Class="80" Ins="14" P1="00" P2="00" P3="00"/>
+  <Apdu Name="SAM - Get Card ID Number" Class="80" Ins="14" P1="04" P2="00" P3="06"/>
+  <Apdu Name="SAM - Get EEPROM size" Class="80" Ins="14" P1="05" P2="00" P3="00"/>
+  <Apdu Name="SAM - Get Version Number" Class="80" Ins="14" P1="06" P2="00" P3="08"/>
+  <Apdu Name="SAM - Get Response" Class="00" Ins="C0" P1="00" P2="00" P3="SW2"/>
+  <Apdu Name="SAM - Get Challenge" Class="00" Ins="84" P1="00" P2="00" P3="08"/>
+  <Apdu Name="ACOS2 - Get Response" Class="80" Ins="C0" P1="00" P2="00" P3="SW2"/>
+  <Apdu Name="ACOS2 - Load Key Data" Class="80" Ins="72" P1="05" P2="85" P3="00"/>
+  <Apdu Name="SAM - Select File" Class="00" Ins="A4" P1="00" P2="00" Data="3F00" P3="02"/>
+  <Apdu Name="SAM - Verify PIN" Class="00" Ins="20" P1="00" P2="01" Data="0000000000000000" P3="08"/>
+  <Apdu Name="SAM - Prepare Authentication" Class="80" Ins="78" P1="81" P2="05" Data="0000000000000000" P3="08"/>
 </ApduList>

@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="APDULog.cs" />
     <Compile Include="APDUPlayer.cs" />
+    <Compile Include="CardHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

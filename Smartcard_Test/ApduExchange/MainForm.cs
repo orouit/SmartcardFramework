@@ -60,6 +60,7 @@ namespace TestGemCard
 		private	APDUParam apduParam = null;
 
 		const string APDU_LIST_FILE = "ApduList.xml";
+        private TextBox textBoxLog;
         const string DEFAULT_READER = "Gemplus USB Smart Card Reader 0";
 
 		public MainForm()
@@ -136,6 +137,7 @@ namespace TestGemCard
             this.txtboxATR = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.checkBoxEnterAPDUManually = new System.Windows.Forms.CheckBox();
+            this.textBoxLog = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel_Sw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel_Info)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -169,7 +171,7 @@ namespace TestGemCard
             // 
             // btnTransmit
             // 
-            this.btnTransmit.Location = new System.Drawing.Point(336, 72);
+            this.btnTransmit.Location = new System.Drawing.Point(335, 107);
             this.btnTransmit.Name = "btnTransmit";
             this.btnTransmit.Size = new System.Drawing.Size(75, 23);
             this.btnTransmit.TabIndex = 6;
@@ -178,12 +180,12 @@ namespace TestGemCard
             // 
             // statusBar
             // 
-            this.statusBar.Location = new System.Drawing.Point(0, 268);
+            this.statusBar.Location = new System.Drawing.Point(0, 306);
             this.statusBar.Name = "statusBar";
             this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.statusBarPanel_Sw,
             this.statusBarPanel_Info});
-            this.statusBar.Size = new System.Drawing.Size(500, 24);
+            this.statusBar.Size = new System.Drawing.Size(836, 24);
             this.statusBar.TabIndex = 7;
             // 
             // statusBarPanel_Sw
@@ -198,7 +200,7 @@ namespace TestGemCard
             // 
             this.comboApdu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboApdu.FormattingEnabled = true;
-            this.comboApdu.Location = new System.Drawing.Point(120, 72);
+            this.comboApdu.Location = new System.Drawing.Point(119, 107);
             this.comboApdu.Name = "comboApdu";
             this.comboApdu.Size = new System.Drawing.Size(208, 21);
             this.comboApdu.TabIndex = 8;
@@ -206,7 +208,7 @@ namespace TestGemCard
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(20, 75);
+            this.label2.Location = new System.Drawing.Point(19, 110);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 21);
             this.label2.TabIndex = 9;
@@ -228,7 +230,7 @@ namespace TestGemCard
             this.groupBox1.Controls.Add(this.textClass);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textData);
-            this.groupBox1.Location = new System.Drawing.Point(12, 134);
+            this.groupBox1.Location = new System.Drawing.Point(11, 169);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(408, 128);
             this.groupBox1.TabIndex = 10;
@@ -360,7 +362,7 @@ namespace TestGemCard
             // 
             // txtboxATR
             // 
-            this.txtboxATR.Location = new System.Drawing.Point(205, 34);
+            this.txtboxATR.Location = new System.Drawing.Point(43, 70);
             this.txtboxATR.Name = "txtboxATR";
             this.txtboxATR.ReadOnly = true;
             this.txtboxATR.Size = new System.Drawing.Size(283, 20);
@@ -369,7 +371,7 @@ namespace TestGemCard
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(173, 37);
+            this.label10.Location = new System.Drawing.Point(11, 73);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(29, 13);
             this.label10.TabIndex = 14;
@@ -378,7 +380,7 @@ namespace TestGemCard
             // checkBoxEnterAPDUManually
             // 
             this.checkBoxEnterAPDUManually.AutoSize = true;
-            this.checkBoxEnterAPDUManually.Location = new System.Drawing.Point(23, 99);
+            this.checkBoxEnterAPDUManually.Location = new System.Drawing.Point(22, 134);
             this.checkBoxEnterAPDUManually.Name = "checkBoxEnterAPDUManually";
             this.checkBoxEnterAPDUManually.Size = new System.Drawing.Size(129, 17);
             this.checkBoxEnterAPDUManually.TabIndex = 15;
@@ -386,10 +388,20 @@ namespace TestGemCard
             this.checkBoxEnterAPDUManually.UseVisualStyleBackColor = true;
             this.checkBoxEnterAPDUManually.CheckedChanged += new System.EventHandler(this.CheckBoxEnterAPDUManually_CheckedChanged);
             // 
+            // textBoxLog
+            // 
+            this.textBoxLog.Location = new System.Drawing.Point(425, 12);
+            this.textBoxLog.Multiline = true;
+            this.textBoxLog.Name = "textBoxLog";
+            this.textBoxLog.ReadOnly = true;
+            this.textBoxLog.Size = new System.Drawing.Size(399, 285);
+            this.textBoxLog.TabIndex = 16;
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(500, 292);
+            this.ClientSize = new System.Drawing.Size(836, 330);
+            this.Controls.Add(this.textBoxLog);
             this.Controls.Add(this.checkBoxEnterAPDUManually);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.txtboxATR);
@@ -491,7 +503,9 @@ namespace TestGemCard
                 {
                     apduResp = apduPlayer.ProcessCommand((string)comboApdu.SelectedItem, BuildAPDUParameters());
                 }
-				
+
+                DisplayLog(apduPlayer.Log);
+
                 textDOut.Text = (apduResp.Data != null) 
                     ? ByteArray.ToString(apduResp.Data)
                     : string.Empty;
@@ -508,6 +522,15 @@ namespace TestGemCard
 				statusBarPanel_Info.Text = ex.Message;
 			}
 		}
+
+        private void DisplayLog(APDULogList apduLogList)
+        {
+            textBoxLog.Text = string.Empty;
+            foreach(APDULog apduLog in apduLogList)
+            {
+                textBoxLog.Text += apduLog.ToString() + "\r\n";
+            }
+        }
 
 		private void SelectICard()
 		{

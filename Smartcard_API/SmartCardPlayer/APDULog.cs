@@ -42,7 +42,7 @@ namespace Core.Smartcard
 
         public override string ToString()
         {
-            return m_apduCmd.ToString() + "\r\n" + m_apduResp.ToString();
+            return m_apduCmd.ToString() + "\r\n ==> " + m_apduResp.ToString();
         }
     }
 

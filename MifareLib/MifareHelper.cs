@@ -9,14 +9,11 @@ using System;
 
 namespace Core.Smartcard.Mifare
 {
-    public class MifareHelper
+    public class MifareHelper : CardHelper
     {
-        private APDUPlayer apduPlayer;
-        private APDUResponse lastApduResponse = null;
-
         public MifareHelper(ICard card)
+            : base(card)
         {
-            apduPlayer = new APDUPlayer(card);
         }
 
         public bool AuthenticateBlock(int blockNumber, int keyType = MifareParam.KEY_TYPE_A, int keyNumber = 0)
@@ -99,20 +96,6 @@ namespace Core.Smartcard.Mifare
             }
 
             return lastApduResponse.Status == MifareStatus.SUCCESS;
-        }
-
-        public ushort StatusCode
-        {
-            get 
-            {
-                ushort code = 0xFFFF;
-                if (lastApduResponse != null)
-                {
-                    code = lastApduResponse.Status; 
-                }
-
-                return code;
-            }
         }
     }
 }
