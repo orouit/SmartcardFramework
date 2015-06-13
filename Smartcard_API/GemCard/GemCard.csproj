@@ -151,7 +151,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ByteArray.cs" />
     <Compile Include="CardBase.cs" />
     <Compile Include="CardBaseEx.cs" />
     <Compile Include="CardEventArgs.cs" />

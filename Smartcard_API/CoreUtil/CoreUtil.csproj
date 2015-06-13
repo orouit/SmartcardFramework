@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{524423E9-BCB4-48DC-B229-EA6CC989B18F}</ProjectGuid>
+    <ProjectGuid>{6546861A-BA3B-43ED-881C-2F1AD9550293}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Core.Smartcard.Mifare</RootNamespace>
-    <AssemblyName>MifareLib</AssemblyName>
+    <RootNamespace>CoreUtil</RootNamespace>
+    <AssemblyName>CoreUtil</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -40,30 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticateBlockCommand.cs" />
-    <Compile Include="CopyValueBlockCommand.cs" />
-    <Compile Include="MifareHelper.cs" />
-    <Compile Include="MifareParam.cs" />
-    <Compile Include="MifareStatus.cs" />
+    <Compile Include="ByteArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadBinaryBlocksCommand.cs" />
-    <Compile Include="ReadValueBlockCommand.cs" />
-    <Compile Include="UpdateBinaryBlocksCommand.cs" />
-    <Compile Include="ValueBlockOperationCommand.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Smartcard_API\CoreUtil\CoreUtil.csproj">
-      <Project>{6546861a-ba3b-43ed-881c-2f1ad9550293}</Project>
-      <Name>CoreUtil</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Smartcard_API\GemCard\GemCard.csproj">
-      <Project>{8b10d15a-39de-4b56-8dd1-710c1eb3a697}</Project>
-      <Name>GemCard</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Smartcard_API\SmartCardPlayer\SmartCardPlayer.csproj">
-      <Project>{acdd475f-e58c-41d6-a258-479ce0c5db6d}</Project>
-      <Name>SmartCardPlayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
