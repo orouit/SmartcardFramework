@@ -15,7 +15,7 @@ namespace ReaderTestApp
         {
             try
             {
-                string[] readerList = Reader.ListReaders();
+                string[] readerList = Reader.GetReaderList();
                 for (int nI = 0; nI < readerList.Length; nI++)
                 {
                     Console.WriteLine(string.Format("Reader[{0}] = {1}", nI, readerList[nI]));  

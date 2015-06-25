@@ -32,6 +32,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MifareLib", "MifareLib\MifareLib.csproj", "{524423E9-BCB4-48DC-B229-EA6CC989B18F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreUtil", "Smartcard_API\CoreUtil\CoreUtil.csproj", "{6546861A-BA3B-43ED-881C-2F1AD9550293}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DESFireLib", "DESFireLib\DESFireLib.csproj", "{B4DC72AD-6619-42CD-AE63-AE05B78E13FD}"
 EndProject
 Global

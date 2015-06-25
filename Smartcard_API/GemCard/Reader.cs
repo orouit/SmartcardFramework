@@ -444,7 +444,7 @@ namespace Core.Smartcard
         ///	);
         /// </summary>
         /// <returns>A string array of the readers</returns>
-        public static string[] ListReaders()
+        public static string[] GetReaderList()
         {
             IntPtr hContext = EstablishContext(SCOPE.User);
 

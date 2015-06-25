@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Core.Smartcard.Mifare</RootNamespace>
     <AssemblyName>MifareLib</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +52,10 @@
     <Compile Include="ValueBlockOperationCommand.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Smartcard_API\CoreUtil\CoreUtil.csproj">
+      <Project>{6546861a-ba3b-43ed-881c-2f1ad9550293}</Project>
+      <Name>CoreUtil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Smartcard_API\GemCard\GemCard.csproj">
       <Project>{8b10d15a-39de-4b56-8dd1-710c1eb3a697}</Project>
       <Name>GemCard</Name>

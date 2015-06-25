@@ -141,7 +141,8 @@
   <ItemGroup>
     <Content Include="..\..\ApduList.xml">
       <Link>ApduList.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App.ico" />
     <Compile Include="AssemblyInfo.cs" />
@@ -154,6 +155,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Smartcard_API\CoreUtil\CoreUtil.csproj">
+      <Project>{6546861a-ba3b-43ed-881c-2f1ad9550293}</Project>
+      <Name>CoreUtil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Smartcard_API\GemCard\GemCard.csproj">
       <Project>{8B10D15A-39DE-4B56-8DD1-710C1EB3A697}</Project>
       <Name>GemCard</Name>

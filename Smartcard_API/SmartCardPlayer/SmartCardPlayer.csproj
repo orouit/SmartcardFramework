@@ -93,6 +93,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoreUtil\CoreUtil.csproj">
+      <Project>{6546861a-ba3b-43ed-881c-2f1ad9550293}</Project>
+      <Name>CoreUtil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GemCard\GemCard.csproj">
       <Project>{8B10D15A-39DE-4B56-8DD1-710C1EB3A697}</Project>
       <Name>GemCard</Name>
