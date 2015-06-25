@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ApduList>
-  <Apdu Name="DESFire - Select AID" Class="90" Ins="5A" P1="00" P2="00" Data="000000" P3="03"/>
-  <Apdu Name="DESFire - Create AID" Class="90" Ins="CA" P1="00" P2="00" Data="0100000F02" P3="DL"/> 
+  <Apdu Name="DESFire - Select AID" Class="90" Ins="5A" P1="00" P2="00" Data="4F5244" P3="03"/>
+  <Apdu Name="DESFire - Create AID" Class="90" Ins="CA" P1="00" P2="00" Data="0100000F02" P3="DL"/>
+  <Apdu Name="DESFire - Delete AID" Class="90" Ins="DA" P1="00" P2="00" Data="010000" P3="DL"/>
   <Apdu Name="DESFire - Get AIDs" Class="90" Ins="6A" P1="00" P2="00" P3="00"/>
   <Apdu Name="DESFire - Get File IDs" Class="90" Ins="6F" P1="00" P2="00" P3="00"/>
   <Apdu Name="DESFire - Get Value" Class="90" Ins="6C" P1="00" P2="00" Data="00" P3="DL"/>
   <Apdu Name="DESFire - Credit Value" Class="90" Ins="0C" P1="00" P2="00" Data="0005000000" P3="DL"/>
   <Apdu Name="DESFire - Debit Value" Class="90" Ins="DC" P1="00" P2="00" Data="0005000000" P3="DL"/>
   <Apdu Name="DESFire - Delete File" Class="90" Ins="DF" P1="00" P2="00" Data="00" P3="DL"/>
-  <Apdu Name="DESFire - Create Value File" Class="90" Ins="CC" P1="00" P2="00" Data="0000EEEE00000000FF0F00000000000000" P3="DL"/>
+  <Apdu Name="DESFire - Create Value File" Class="90" Ins="CC" P1="00" P2="00" Data="0000EEEE0000000050C300001027000000" P3="DL"/>
+  <Apdu Name="DESFire - Create Std File" Class="90" Ins="CD" P1="00" P2="00" Data="0100EEEEFF0700" P3="DL"/>
   <Apdu Name="DESFire - Commit Transaction" Class="90" Ins="C7" P1="00" P2="00" P3="00"/>
   <Apdu Name="DESFire - Abort Transaction" Class="90" Ins="A7" P1="00" P2="00" P3="00"/>
   <Apdu Name="DESFire - Get Version" Class="90" Ins="60" P1="00" P2="00" P3="00"/>

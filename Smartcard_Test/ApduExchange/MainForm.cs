@@ -145,47 +145,47 @@ namespace TestGemCard
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(29, 76);
+            this.btnConnect.Location = new System.Drawing.Point(11, 32);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(195, 55);
+            this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 2;
             this.btnConnect.Text = "Connect";
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(21, 21);
+            this.label1.Location = new System.Drawing.Point(8, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(208, 48);
+            this.label1.Size = new System.Drawing.Size(80, 20);
             this.label1.TabIndex = 4;
             this.label1.Text = "Reader name";
             // 
             // btnDisconnect
             // 
-            this.btnDisconnect.Location = new System.Drawing.Point(239, 76);
+            this.btnDisconnect.Location = new System.Drawing.Point(92, 32);
             this.btnDisconnect.Name = "btnDisconnect";
-            this.btnDisconnect.Size = new System.Drawing.Size(195, 55);
+            this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
             this.btnDisconnect.TabIndex = 5;
             this.btnDisconnect.Text = "Disconnect";
             this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
             // 
             // btnTransmit
             // 
-            this.btnTransmit.Location = new System.Drawing.Point(871, 255);
+            this.btnTransmit.Location = new System.Drawing.Point(335, 107);
             this.btnTransmit.Name = "btnTransmit";
-            this.btnTransmit.Size = new System.Drawing.Size(195, 55);
+            this.btnTransmit.Size = new System.Drawing.Size(75, 23);
             this.btnTransmit.TabIndex = 6;
             this.btnTransmit.Text = "Transmit";
             this.btnTransmit.Click += new System.EventHandler(this.btnTransmit_Click);
             // 
             // statusBar
             // 
-            this.statusBar.Location = new System.Drawing.Point(0, 731);
+            this.statusBar.Location = new System.Drawing.Point(0, 313);
             this.statusBar.Name = "statusBar";
             this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.statusBarPanel_Sw,
             this.statusBarPanel_Info});
-            this.statusBar.Size = new System.Drawing.Size(2170, 57);
+            this.statusBar.Size = new System.Drawing.Size(829, 23);
             this.statusBar.TabIndex = 7;
             // 
             // statusBarPanel_Sw
@@ -200,17 +200,17 @@ namespace TestGemCard
             // 
             this.comboApdu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboApdu.FormattingEnabled = true;
-            this.comboApdu.Location = new System.Drawing.Point(309, 255);
+            this.comboApdu.Location = new System.Drawing.Point(119, 107);
             this.comboApdu.Name = "comboApdu";
-            this.comboApdu.Size = new System.Drawing.Size(541, 39);
+            this.comboApdu.Size = new System.Drawing.Size(208, 21);
             this.comboApdu.TabIndex = 8;
             this.comboApdu.SelectedIndexChanged += new System.EventHandler(this.comboApdu_SelectedIndexChanged);
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(49, 262);
+            this.label2.Location = new System.Drawing.Point(19, 110);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(260, 50);
+            this.label2.Size = new System.Drawing.Size(100, 21);
             this.label2.TabIndex = 9;
             this.label2.Text = "APDU Command";
             // 
@@ -230,159 +230,159 @@ namespace TestGemCard
             this.groupBox1.Controls.Add(this.textClass);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textData);
-            this.groupBox1.Location = new System.Drawing.Point(29, 403);
+            this.groupBox1.Location = new System.Drawing.Point(11, 169);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1060, 305);
+            this.groupBox1.Size = new System.Drawing.Size(408, 128);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "APDU";
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(707, 38);
+            this.label9.Location = new System.Drawing.Point(272, 16);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(229, 38);
+            this.label9.Size = new System.Drawing.Size(88, 16);
             this.label9.TabIndex = 13;
             this.label9.Text = "Received Data";
             // 
             // textDOut
             // 
-            this.textDOut.Location = new System.Drawing.Point(707, 76);
+            this.textDOut.Location = new System.Drawing.Point(272, 32);
             this.textDOut.Multiline = true;
             this.textDOut.Name = "textDOut";
             this.textDOut.ReadOnly = true;
-            this.textDOut.Size = new System.Drawing.Size(333, 210);
+            this.textDOut.Size = new System.Drawing.Size(128, 88);
             this.textDOut.TabIndex = 12;
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(354, 38);
+            this.label8.Location = new System.Drawing.Point(136, 16);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(145, 38);
+            this.label8.Size = new System.Drawing.Size(56, 16);
             this.label8.TabIndex = 11;
             this.label8.Text = "Sent Data";
             // 
             // textLe
             // 
-            this.textLe.Location = new System.Drawing.Point(83, 153);
+            this.textLe.Location = new System.Drawing.Point(32, 64);
             this.textLe.MaxLength = 4;
             this.textLe.Name = "textLe";
-            this.textLe.Size = new System.Drawing.Size(104, 38);
+            this.textLe.Size = new System.Drawing.Size(40, 20);
             this.textLe.TabIndex = 10;
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(21, 153);
+            this.label7.Location = new System.Drawing.Point(8, 64);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(62, 54);
+            this.label7.Size = new System.Drawing.Size(24, 23);
             this.label7.TabIndex = 9;
             this.label7.Text = "Le";
             // 
             // textP2
             // 
-            this.textP2.Location = new System.Drawing.Point(270, 95);
+            this.textP2.Location = new System.Drawing.Point(104, 40);
             this.textP2.MaxLength = 2;
             this.textP2.Name = "textP2";
-            this.textP2.Size = new System.Drawing.Size(63, 38);
+            this.textP2.Size = new System.Drawing.Size(24, 20);
             this.textP2.TabIndex = 8;
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(208, 95);
+            this.label6.Location = new System.Drawing.Point(80, 40);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(62, 55);
+            this.label6.Size = new System.Drawing.Size(24, 23);
             this.label6.TabIndex = 7;
             this.label6.Text = "P2";
             // 
             // textP1
             // 
-            this.textP1.Location = new System.Drawing.Point(125, 95);
+            this.textP1.Location = new System.Drawing.Point(48, 40);
             this.textP1.MaxLength = 2;
             this.textP1.Name = "textP1";
-            this.textP1.Size = new System.Drawing.Size(62, 38);
+            this.textP1.Size = new System.Drawing.Size(24, 20);
             this.textP1.TabIndex = 6;
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(21, 95);
+            this.label5.Location = new System.Drawing.Point(8, 40);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(62, 55);
+            this.label5.Size = new System.Drawing.Size(24, 23);
             this.label5.TabIndex = 5;
             this.label5.Text = "P1";
             // 
             // textIns
             // 
-            this.textIns.Location = new System.Drawing.Point(270, 38);
+            this.textIns.Location = new System.Drawing.Point(104, 16);
             this.textIns.MaxLength = 2;
             this.textIns.Name = "textIns";
-            this.textIns.Size = new System.Drawing.Size(63, 38);
+            this.textIns.Size = new System.Drawing.Size(24, 20);
             this.textIns.TabIndex = 4;
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(208, 38);
+            this.label4.Location = new System.Drawing.Point(80, 16);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(62, 55);
+            this.label4.Size = new System.Drawing.Size(24, 23);
             this.label4.TabIndex = 3;
             this.label4.Text = "Ins";
             // 
             // textClass
             // 
-            this.textClass.Location = new System.Drawing.Point(125, 38);
+            this.textClass.Location = new System.Drawing.Point(48, 16);
             this.textClass.MaxLength = 2;
             this.textClass.Name = "textClass";
-            this.textClass.Size = new System.Drawing.Size(62, 38);
+            this.textClass.Size = new System.Drawing.Size(24, 20);
             this.textClass.TabIndex = 2;
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(21, 38);
+            this.label3.Location = new System.Drawing.Point(8, 16);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(104, 55);
+            this.label3.Size = new System.Drawing.Size(40, 23);
             this.label3.TabIndex = 1;
             this.label3.Text = "Class";
             // 
             // textData
             // 
-            this.textData.Location = new System.Drawing.Point(354, 76);
+            this.textData.Location = new System.Drawing.Point(136, 32);
             this.textData.Multiline = true;
             this.textData.Name = "textData";
-            this.textData.Size = new System.Drawing.Size(332, 210);
+            this.textData.Size = new System.Drawing.Size(128, 88);
             this.textData.TabIndex = 0;
             // 
             // comboReader
             // 
             this.comboReader.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboReader.FormattingEnabled = true;
-            this.comboReader.Location = new System.Drawing.Point(244, 14);
+            this.comboReader.Location = new System.Drawing.Point(94, 6);
             this.comboReader.Name = "comboReader";
-            this.comboReader.Size = new System.Drawing.Size(838, 39);
+            this.comboReader.Size = new System.Drawing.Size(322, 21);
             this.comboReader.TabIndex = 12;
             this.comboReader.SelectedIndexChanged += new System.EventHandler(this.comboReader_SelectedIndexChanged);
             // 
             // txtboxATR
             // 
-            this.txtboxATR.Location = new System.Drawing.Point(112, 167);
+            this.txtboxATR.Location = new System.Drawing.Point(43, 70);
             this.txtboxATR.Name = "txtboxATR";
             this.txtboxATR.ReadOnly = true;
-            this.txtboxATR.Size = new System.Drawing.Size(736, 38);
+            this.txtboxATR.Size = new System.Drawing.Size(283, 20);
             this.txtboxATR.TabIndex = 13;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(29, 174);
+            this.label10.Location = new System.Drawing.Point(11, 73);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(71, 32);
+            this.label10.Size = new System.Drawing.Size(29, 13);
             this.label10.TabIndex = 14;
             this.label10.Text = "ATR";
             // 
             // checkBoxEnterAPDUManually
             // 
             this.checkBoxEnterAPDUManually.AutoSize = true;
-            this.checkBoxEnterAPDUManually.Location = new System.Drawing.Point(57, 320);
+            this.checkBoxEnterAPDUManually.Location = new System.Drawing.Point(22, 134);
             this.checkBoxEnterAPDUManually.Name = "checkBoxEnterAPDUManually";
-            this.checkBoxEnterAPDUManually.Size = new System.Drawing.Size(328, 36);
+            this.checkBoxEnterAPDUManually.Size = new System.Drawing.Size(129, 17);
             this.checkBoxEnterAPDUManually.TabIndex = 15;
             this.checkBoxEnterAPDUManually.Text = "Enter APDU Manually";
             this.checkBoxEnterAPDUManually.UseVisualStyleBackColor = true;
@@ -390,18 +390,18 @@ namespace TestGemCard
             // 
             // textBoxLog
             // 
-            this.textBoxLog.Location = new System.Drawing.Point(1105, 29);
+            this.textBoxLog.Location = new System.Drawing.Point(425, 12);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.ReadOnly = true;
             this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLog.Size = new System.Drawing.Size(1037, 679);
+            this.textBoxLog.Size = new System.Drawing.Size(399, 285);
             this.textBoxLog.TabIndex = 16;
             // 
             // MainForm
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(13, 31);
-            this.ClientSize = new System.Drawing.Size(2170, 788);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(829, 336);
             this.Controls.Add(this.textBoxLog);
             this.Controls.Add(this.checkBoxEnterAPDUManually);
             this.Controls.Add(this.label10);
