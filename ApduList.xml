@@ -22,6 +22,19 @@
   <Apdu Name="SAM - Select File" Class="00" Ins="A4" P1="00" P2="00" Data="3F00" P3="02"/>
   <Apdu Name="SAM - Verify PIN" Class="00" Ins="20" P1="00" P2="01" Data="0000000000000000" P3="08"/>
   <Apdu Name="SAM - Prepare Authentication (DES)" Class="80" Ins="78" P1="01" P2="05" Data="0000000000000000" P3="08"/>
+  <Apdu Name="SAM - Create Cyclic File" Class="00" Ins="E0" P1="00" P2="00" Data="62108302110F8205060000FF208C03030000" P3="DL"/>
+  <Apdu Name="SAM - Read First Record" Class="00" Ins="B2" P1="00" P2="00" P3="100"/>
+  <Apdu Name="SAM - Read Next Record" Class="00" Ins="B2" P1="00" P2="02" P3="100"/>
+  <Apdu Name="SAM - Read Previous Record" Class="00" Ins="B2" P1="00" P2="03" P3="100"/>
+  <Apdu Name="SAM - Write First Record" Class="00" Ins="DC" P1="00" P2="00" Data="11111111111111111111" P3="DL"/>
+  <Apdu Name="SAM - Write Next Record" Class="00" Ins="DC" P1="00" P2="02" Data="22222222222222222222" P3="DL"/>
+  <Apdu Name="SAM - Get Card Serial Number" Class="80" Ins="14" P1="00" P2="00" P3="08"/> 
+  <Apdu Name="SAM - Get Number of files" Class="80" Ins="14" P1="00" P2="00" P3="00"/>
+  <Apdu Name="SAM - Get Card ID Number" Class="80" Ins="14" P1="04" P2="00" P3="06"/>
+  <Apdu Name="SAM - Get EEPROM size" Class="80" Ins="14" P1="05" P2="00" P3="00"/>
+  <Apdu Name="SAM - Get Version Number" Class="80" Ins="14" P1="06" P2="00" P3="08"/>
+  <Apdu Name="SAM - Get Response" Class="00" Ins="C0" P1="00" P2="00" P3="SW2"/>
+  <Apdu Name="SAM - Get Challenge" Class="00" Ins="84" P1="00" P2="00" P3="08"/>
   <Apdu Name="Verify CHV" Class="A0" Ins="20" P1="0" P2="1" P3="8" Data="31323334FFFFFFFF" />
 	<Apdu Name="Select MF" Class="A0" Ins="A4" P1="0" P2="0" P3="2" Data="3F00" />
 	<Apdu Name="Select File" Class="A0" Ins="A4" P1="0" P2="0" P3="2" Data="0000" />
@@ -46,11 +59,4 @@
   <Apdu Name="Mifare - Decrement Value Block" Class="FF" Ins="D7" P1="00" P2="00" P3="5" Data="0200000001"/>
   <Apdu Name="Mifare - Read Value Block" Class="FF" Ins="B1" P1="00" P2="00" P3="4"/> 
   <Apdu Name="Mifare - Copy Value Block" Class="FF" Ins="D7" P1="00" p2="00" P3="02" Data="0304"/>
-  <Apdu Name="SAM - Get Card Serial Number" Class="80" Ins="14" P1="00" P2="00" P3="08"/> 
-  <Apdu Name="SAM - Get Number of files" Class="80" Ins="14" P1="00" P2="00" P3="00"/>
-  <Apdu Name="SAM - Get Card ID Number" Class="80" Ins="14" P1="04" P2="00" P3="06"/>
-  <Apdu Name="SAM - Get EEPROM size" Class="80" Ins="14" P1="05" P2="00" P3="00"/>
-  <Apdu Name="SAM - Get Version Number" Class="80" Ins="14" P1="06" P2="00" P3="08"/>
-  <Apdu Name="SAM - Get Response" Class="00" Ins="C0" P1="00" P2="00" P3="SW2"/>
-  <Apdu Name="SAM - Get Challenge" Class="00" Ins="84" P1="00" P2="00" P3="08"/>
 </ApduList>

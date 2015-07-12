@@ -12,12 +12,12 @@ namespace Core.Smartcard
 	/// <summary>
 	/// This class represents a command APDU
 	/// </summary>
-	public	class	APDUCommand
+	public class APDUCommand
 	{
 		/// <summary>
 		/// Minimun size in bytes of an APDU command
 		/// </summary>
-		public	const int	APDU_MIN_LENGTH = 4;
+		public const int APDU_MIN_LENGTH = 4;
 
 		private	byte	bCla;
 		private	byte	bIns;
@@ -35,7 +35,7 @@ namespace Core.Smartcard
 		/// <param name="bP2">Parameter P2 byte</param>
 		/// <param name="baData">Data to send to the card if any, null if no data to send</param>
 		/// <param name="bLe">Number of data expected, 0 if none</param>
-		public	APDUCommand(byte bCla, byte bIns, byte bP1, byte bP2, byte[] baData, byte bLe)
+		public APDUCommand(byte bCla, byte bIns, byte bP1, byte bP2, byte[] baData, byte bLe)
 		{
 			this.bCla = bCla;
 			this.bIns = bIns;

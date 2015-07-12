@@ -71,6 +71,13 @@ namespace Core.Smartcard
 		/// <param name="Disposition"></param>
 		void Disconnect(DISCONNECT Disposition);
 
+        /// <summary>
+        /// Wraps the PCSC function SCardControl
+        /// </summary>
+        /// <param name="apduCmd">Command to send</param>
+        /// <returns>Command response</returns>
+        ControlResponse Control(ControlCommand controlCmd);
+
 		/// <summary>
 		/// Wraps the PCSC function
 		/// LONG SCardTransmit(
@@ -83,9 +90,9 @@ namespace Core.Smartcard
 		///		LPDWORD pcbRecvLength
 		///	);
 		/// </summary>
-		/// <param name="ApduCmd">APDUCommand object with the APDU to send to the card</param>
+		/// <param name="apduCmd">APDUCommand object with the APDU to send to the card</param>
 		/// <returns>An APDUResponse object with the response from the card</returns>
-		APDUResponse Transmit(APDUCommand ApduCmd);
+		APDUResponse Transmit(APDUCommand apduCmd);
 
         /// <summary>
         /// Wraps the PSCS function
@@ -110,6 +117,8 @@ namespace Core.Smartcard
         /// <param name="AttribId">Identifier for the Attribute to get</param>
         /// <returns>Attribute content</returns>
         byte[] GetAttribute(UInt32 AttribId);
+
+        string[] CommandTrace { get; }
 	}
 
 	/// <summary>

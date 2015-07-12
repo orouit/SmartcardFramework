@@ -1,5 +1,7 @@
 ﻿/**
- * Copyright 2015 Caribepay
+ * @author Olivier ROUIT
+ * 
+ * @license CPL, CodeProject license 
  */
 
 namespace Core.Smartcard
@@ -11,6 +13,7 @@ namespace Core.Smartcard
 
         protected CardHelper(ICard card)
         {
+            Card = card;
             apduPlayer = new APDUPlayer(card);
         }
 
@@ -31,6 +34,12 @@ namespace Core.Smartcard
 
                 return code;
             }
+        }
+
+        public ICard Card
+        {
+            get;
+            private set;
         }
     }
 }

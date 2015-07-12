@@ -62,10 +62,15 @@ namespace Core.Smartcard
 
         private XmlNodeList m_xmlApduList = null;
         private XmlNodeList m_xmlSequenceList = null;
-		private	ICard		m_iCard = null;
 		private	APDUResponse	m_apduResp = null;
 
         private APDULogList m_logList = new APDULogList();
+
+        public ICard Card
+        {
+            get;
+            private set;
+        }
 
 		/// <summary>
 		/// Constructor
@@ -87,7 +92,7 @@ namespace Core.Smartcard
                 // Get the list of sequences
                 m_xmlSequenceList = apduDoc.GetElementsByTagName(xmlNodeSequence);
 
-				m_iCard = iCard;
+				Card = iCard;
 			}
 			catch
 			{
@@ -109,7 +114,7 @@ namespace Core.Smartcard
         /// <param name="iCard">ICard interface to the Smartcard</param>
         public APDUPlayer(ICard iCard)
         {
-            m_iCard = iCard;
+            Card = iCard;
         }
 
         /// <summary>
@@ -123,7 +128,7 @@ namespace Core.Smartcard
             LoadAPDUFile(apduFileName);
             LoadSequenceFile(seqFileName);
 
-            m_iCard = iCard;
+            Card = iCard;
         }
 
         /// <summary>
@@ -252,7 +257,7 @@ namespace Core.Smartcard
             byte bLe = 0;
 
             // Send the command
-            m_apduResp = m_iCard.Transmit(apduCmd);
+            m_apduResp = Card.Transmit(apduCmd);
             AddLog(new APDULog(apduCmd, m_apduResp));
 
             // Check if SW2 can be used as Le for the next call
@@ -285,7 +290,7 @@ namespace Core.Smartcard
                     apduCmd.Data,
                     bLe);
 
-                m_apduResp = m_iCard.Transmit(apduCmd);
+                m_apduResp = Card.Transmit(apduCmd);
                 AddLog(new APDULog(apduCmd, m_apduResp));
 
                 m_bReplay = false;

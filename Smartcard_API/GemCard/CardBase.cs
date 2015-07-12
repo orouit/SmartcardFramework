@@ -4,6 +4,7 @@
  * @license CPL, CodeProject license 
  */
 
+using Core.Utility;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -81,14 +82,34 @@ namespace Core.Smartcard
         }
 
         #region Abstract method that implement the ICard interface
+
         abstract public string[] ListReaders();
         abstract public void Connect(string Reader, SHARE ShareMode, PROTOCOL PreferredProtocols);
         abstract public void Disconnect(DISCONNECT Disposition);
+        abstract public ControlResponse Control(ControlCommand controlCmd);
         abstract public APDUResponse Transmit(APDUCommand ApduCmd);
         abstract public void BeginTransaction();
         abstract public void EndTransaction(DISCONNECT Disposition);
         abstract public byte[] GetAttribute(UInt32 AttribId);
+
         #endregion
+
+        public virtual ControlResponse Control(IntPtr cardHandle, ControlCommand controlCmd)
+        {
+            int recvBufferLength = 255;
+            int recvdLength = recvBufferLength;
+            byte[] recvData = new byte[recvBufferLength];
+
+            uint dwControlCode = BitConverter.ToUInt32(ByteArray.ReverseBuffer(controlCmd.ControlCode), 0);
+            int error = PCSC.SCardControl(cardHandle, dwControlCode, controlCmd.ControlData, controlCmd.ControlData.Length, recvData, recvBufferLength, ref recvdLength);
+            ThrowSmartcardException("SCardControl", error);
+
+            byte[] responseData = new byte[recvdLength];
+            Buffer.BlockCopy(recvData, 0, responseData, 0, recvdLength);
+            ControlResponse controlResponse = new ControlResponse(responseData);
+
+            return controlResponse;
+        }
 
         /// <summary>
         /// This method should start a thread that checks for card insertion or removal
@@ -156,6 +177,12 @@ namespace Core.Smartcard
         /// <param name="Reader">Name of the reader to scan for card event</param>
         abstract protected void RunCardDetection(object Reader);
 
+        protected List<string> apduTrace = new List<string>();
+        public string[] CommandTrace
+        {
+            get { return apduTrace.ToArray(); }
+        }
+
         #region Event methods
         protected void CardInserted(string reader)
         {
@@ -173,6 +200,14 @@ namespace Core.Smartcard
         public virtual void Dispose()
         {
             StopCardEvents();
+        }
+
+        protected void ThrowSmartcardException(string methodName, long errCode)
+        {
+            if (errCode != 0)
+            {
+                throw new SmartCardException(string.Format("{0} error: {1:X02}", methodName, errCode));
+            }
         }
     }
 }

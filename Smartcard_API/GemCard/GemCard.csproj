@@ -19,7 +19,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>GemCard</RootNamespace>
+    <RootNamespace>Core.Smartcard</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -158,6 +158,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CardNativeEx.cs" />
+    <Compile Include="ControlCommand.cs" />
+    <Compile Include="ControlResponse.cs" />
     <Compile Include="ICard.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -166,6 +168,12 @@
     <Compile Include="SmartCardException.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreUtil\CoreUtil.csproj">
+      <Project>{6546861a-ba3b-43ed-881c-2f1ad9550293}</Project>
+      <Name>CoreUtil</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -4,7 +4,9 @@
  * @license CPL, CodeProject license 
  */
 
+using Core.Utility;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -224,6 +226,16 @@ namespace Core.Smartcard
 			}
 		}
 
+        /// <summary>
+        /// Wraps the PCSC function SCardControl
+        /// </summary>
+        /// <param name="apduCmd">Command to send</param>
+        /// <returns>Command response</returns>
+        public override ControlResponse Control(ControlCommand controlCmd)
+        {
+            return Control(cardHandle, controlCmd);
+        }
+
 		/// <summary>
 		/// Wraps the PCSC function
 		/// LONG SCardTransmit(
@@ -280,10 +292,13 @@ namespace Core.Smartcard
             lastError = PCSC.SCardTransmit(cardHandle, ref ioRequest, ApduBuffer, (uint)ApduBuffer.Length, IntPtr.Zero, ApduResponse, out outputLength);
             ThrowSmartcardException("SCardTransmit", lastError);
 
-            byte[] ApduData = new byte[outputLength];
-            Buffer.BlockCopy(ApduResponse, 0, ApduData, 0, (int)outputLength); 
+            byte[] responseData = new byte[outputLength];
+            Buffer.BlockCopy(ApduResponse, 0, responseData, 0, (int)outputLength); 
+            string apduString = string.Format("APDU Buffer[{0}] => Response[{1}]", ByteArray.ToString(ApduBuffer), ByteArray.ToString(responseData));
+            apduTrace.Add(apduString);
+            Trace.WriteLine(apduString);
 
-			return new APDUResponse(ApduData);
+			return new APDUResponse(responseData);
 		}
 
         /// <summary>
@@ -399,7 +414,8 @@ namespace Core.Smartcard
                             }
 
                             if (((eventState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT) &&
-                                ((eventState & (uint)PCSC.CARD_STATE.PRESENT) != (currentState & (uint)PCSC.CARD_STATE.PRESENT)))
+                                ((eventState & (uint)PCSC.CARD_STATE.PRESENT) != (currentState & (uint)PCSC.CARD_STATE.PRESENT)) &&
+                                ((eventState & (uint)PCSC.CARD_STATE.MUTE) != (uint)PCSC.CARD_STATE.MUTE))
                             {
                                 // There is a card in the reader -> Fire CardInserted event
                                 CardInserted(reader.ToString());
@@ -439,14 +455,6 @@ namespace Core.Smartcard
             Disconnect(DISCONNECT.Unpower);
 
             ReleaseContext();
-        }
-
-        private void ThrowSmartcardException(string methodName, long errCode)
-        {
-            if (errCode != 0)
-            {
-                throw new SmartCardException(string.Format("{0} error: {1:X02}", methodName, errCode));
-            }
         }
     }
 }

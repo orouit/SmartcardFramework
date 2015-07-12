@@ -222,6 +222,16 @@ namespace Core.Smartcard
 			}
 		}
 
+        /// <summary>
+        /// Wraps the PCSC function SCardControl
+        /// </summary>
+        /// <param name="apduCmd">Command to send</param>
+        /// <returns>Command response</returns>
+        public override ControlResponse Control(ControlCommand controlCmd)
+        {
+            return Control(cardHandle, controlCmd);
+        }
+
 		/// <summary>
 		/// Wraps the PCSC function
 		/// LONG SCardTransmit(

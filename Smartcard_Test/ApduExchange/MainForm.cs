@@ -1,15 +1,8 @@
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Globalization;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml;
-
 using Core.Smartcard;
 using Core.Utility;
+using System;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace TestGemCard
 {
