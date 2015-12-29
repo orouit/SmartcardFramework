@@ -123,7 +123,7 @@ namespace Core.Smartcard
             {
                 m_bRunCardDetection = true;
 
-                m_thread = new Thread(new ParameterizedThreadStart(RunCardDetection));
+                m_thread = new Thread(() => RunCardDetection(Reader));
                 m_thread.Start(Reader);
                 ret = true;
             }
@@ -152,10 +152,10 @@ namespace Core.Smartcard
                         break;
                     }
 
-                    if (m_thread.ThreadState == ThreadState.Aborted)
+                    if (m_thread.ThreadState.HasFlag(ThreadState.Aborted))
                         m_bStop = true;
 
-                    if (m_thread.ThreadState == ThreadState.Stopped)
+                    if (m_thread.ThreadState.HasFlag(ThreadState.Stopped))
                         m_bStop = true;
 
                     Thread.Sleep(200);
@@ -175,7 +175,7 @@ namespace Core.Smartcard
         /// 
         /// </summary>
         /// <param name="Reader">Name of the reader to scan for card event</param>
-        abstract protected void RunCardDetection(object Reader);
+        abstract protected void RunCardDetection(string Reader);
 
         protected List<string> apduTrace = new List<string>();
         public string[] CommandTrace
