@@ -367,16 +367,14 @@ namespace Core.Smartcard
         /// </summary>
         protected override void RunCardDetection(string reader)
         {
+            bool bFirstLoop = true;
             IntPtr hContext = IntPtr.Zero;    // Local context
-            IntPtr phContext = IntPtr.Zero;
+            IntPtr phContext;
 
-            try
+            phContext = Marshal.AllocHGlobal(Marshal.SizeOf(hContext));
+
+            if (PCSC.SCardEstablishContext((uint)SCOPE.User, IntPtr.Zero, IntPtr.Zero, phContext) == 0)
             {
-                phContext = Marshal.AllocHGlobal(Marshal.SizeOf(hContext));
-
-                if (PCSC.SCardEstablishContext((uint)SCOPE.User, IntPtr.Zero, IntPtr.Zero, phContext) != PCSC.SCARD_S_SUCCESS)
-                    return;
-
                 hContext = Marshal.ReadIntPtr(phContext);
                 Marshal.FreeHGlobal(phContext);
 
@@ -386,53 +384,70 @@ namespace Core.Smartcard
                 readerState[0].CurrentState = (UInt32)PCSC.CARD_STATE.UNAWARE;
                 readerState[0].Reader = reader;
 
+                UInt32 eventState;
+                UInt32 currentState = readerState[0].CurrentState;
+
                 // Card detection loop
-                while (true)
+                do
                 {
-                    if (PCSC.SCardGetStatusChange(hContext, WAIT_TIME, readerState, nbReaders) == PCSC.SCARD_S_SUCCESS)
+                    if (PCSC.SCardGetStatusChange(hContext, WAIT_TIME
+                        , readerState, nbReaders) == 0)
                     {
-                        UInt32 currentState = readerState[0].CurrentState;      // the old state (as known by the application)
-                        UInt32 eventState = readerState[0].EventState;          // the new state (as known by Windows)
+                        eventState = readerState[0].EventState;
+                        currentState = readerState[0].CurrentState;
 
-                        // fatal status codes, stop monitoring for insertion/removal
-                        if (((eventState & (uint)PCSC.CARD_STATE.UNKNOWN) == (uint)PCSC.CARD_STATE.UNKNOWN) ||      // reader is unknown
-                            ((eventState & (uint)PCSC.CARD_STATE.IGNORE) == (uint)PCSC.CARD_STATE.IGNORE) ||      // reader should be ignored
-                            ((eventState & (uint)PCSC.CARD_STATE.UNAVAILABLE) == (uint)PCSC.CARD_STATE.UNAVAILABLE))    // reader is unavailable
-                            m_bRunCardDetection = false;
-
-                        if (readerState[0].CurrentState != (uint)PCSC.CARD_STATE.UNAWARE)
+                        if (bFirstLoop)
                         {
-                            bool cardIsPresent = ((eventState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT);
-                            bool cardWasPresent = ((currentState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT);
-
-                            if (cardIsPresent && !cardWasPresent)
+                            // Check if a card is already inserted
+                            if ((eventState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT)
+                            {
                                 CardInserted(reader);
-
-                            if (cardWasPresent && !cardIsPresent)
+                            }
+                        }
+                        else if (((eventState & (uint)PCSC.CARD_STATE.CHANGED) == (uint)PCSC.CARD_STATE.CHANGED) && !bFirstLoop)
+                        {
+                            // State has changed
+                            if ((eventState & (uint)PCSC.CARD_STATE.EMPTY) == (uint)PCSC.CARD_STATE.EMPTY)
+                            {
+                                // There is no card, card has been removed -> Fire CardRemoved event
                                 CardRemoved(reader);
+                            }
+
+                            if (((eventState & (uint)PCSC.CARD_STATE.PRESENT) == (uint)PCSC.CARD_STATE.PRESENT) &&
+                                ((eventState & (uint)PCSC.CARD_STATE.PRESENT) != (currentState & (uint)PCSC.CARD_STATE.PRESENT)) &&
+                                ((eventState & (uint)PCSC.CARD_STATE.MUTE) != (uint)PCSC.CARD_STATE.MUTE))
+                            {
+                                // There is a card in the reader -> Fire CardInserted event
+                                CardInserted(reader);
+                            }
+
+                            if ((eventState & (uint)PCSC.CARD_STATE.ATRMATCH) == (uint)PCSC.CARD_STATE.ATRMATCH)
+                            {
+                                // There is a card in the reader and it matches the ATR we were expecting-> Fire CardInserted event
+                                CardInserted(reader);
+                            }
                         }
 
                         // The current state is now the event state
                         readerState[0].CurrentState = eventState;
+
+                        bFirstLoop = false;
                     }
+
+                    Thread.Sleep(100);
 
                     if (m_bRunCardDetection == false)
                         break;
-
-                    Thread.Sleep(100);
-                } // while
+                }
+                while (true);    // Exit on request
             }
-            catch
+            else
             {
+                Marshal.FreeHGlobal(phContext);
+                throw new Exception("PC/SC error");
             }
-            finally
-            {
-                if (phContext != IntPtr.Zero)
-                    Marshal.FreeHGlobal(phContext);
 
-                if (hContext != IntPtr.Zero)
-                    PCSC.SCardReleaseContext(hContext);
-            }
+            PCSC.SCardReleaseContext(hContext);
         }
 
         public override void Dispose()
