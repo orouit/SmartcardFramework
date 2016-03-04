@@ -142,31 +142,22 @@ namespace Core.Smartcard
 #else
             if (cardDetectTask != null)
             {
-                bool stopped = false;
-
                 if (cardDetectTask.Status == TaskStatus.Running)
                 {
                     cancellationTokenSource.Cancel();
 
-                    do
+                    try
                     {
-                        Thread.SpinWait(20000);
-
-                        if (cardDetectTask.Status == TaskStatus.Canceled)
-                        {
-                            stopped = true;
-                        }
-
-                        if (cardDetectTask.Status == TaskStatus.RanToCompletion)
-                        {
-                            stopped = true;
-                        }
+                        cardDetectTask.Wait();
                     }
-                    while (!stopped);
-
-                    cardDetectTask.Dispose();
-                    cardDetectTask = null;
+                    catch
+                    {
+                        if (!cardDetectTask.IsCanceled)
+                            throw;
+                    }
                 }
+                cardDetectTask.Dispose();
+                cardDetectTask = null;
             }
 #endif
         }
