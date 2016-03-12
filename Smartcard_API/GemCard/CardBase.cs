@@ -124,7 +124,7 @@ namespace Core.Smartcard
                 m_bRunCardDetection = true;
 
                 m_thread = new Thread(() => RunCardDetection(Reader));
-                m_thread.Start(Reader);
+                m_thread.Start();
                 ret = true;
             }
 
