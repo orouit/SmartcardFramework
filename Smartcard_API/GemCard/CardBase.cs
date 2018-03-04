@@ -63,7 +63,7 @@ namespace Core.Smartcard
         protected const uint WAIT_TIME = 250;
 
         protected bool m_bRunCardDetection = true;
-        protected Thread m_thread = null;
+        protected Dictionary<string, Thread> m_threads = new Dictionary<string, Thread>();
 
         /// <summary>
         /// Event handler for the card insertion
@@ -114,28 +114,45 @@ namespace Core.Smartcard
         /// <summary>
         /// This method should start a thread that checks for card insertion or removal
         /// </summary>
-        /// <param name="Reader"></param>
+        /// <param name="r"></param>
         /// <returns>true if the events have been started, false if they are already running</returns>
-        public bool StartCardEvents(string Reader)
+        public bool StartCardEvents(string reader)
         {
             bool ret = false;
+
+            Thread m_thread;
+            m_threads.TryGetValue(reader, out m_thread);
+
             if (m_thread == null)
             {
                 m_bRunCardDetection = true;
 
-                m_thread = new Thread(() => RunCardDetection(Reader));
+                m_thread = new Thread(() => RunCardDetection(reader));
                 m_thread.Start();
+
+                m_threads[reader] = m_thread;
+
                 ret = true;
             }
 
             return ret;
         }
 
+        public void StopCardEvents()
+        {
+            foreach (string reader in m_threads.Keys)
+            {
+                StopCardEvents(reader);
+            }
+        }
+
         /// <summary>
         /// Stops the card events thread
         /// </summary>
-        public void StopCardEvents()
+        public void StopCardEvents(string reader)
         {
+            Thread m_thread = m_threads[reader];
+
             if (m_thread != null)
             {
                 int
